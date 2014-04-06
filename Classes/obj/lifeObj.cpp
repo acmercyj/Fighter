@@ -1,0 +1,175 @@
+//
+//  lifeObj.cpp
+//  Card
+//
+//  Created by cyj on 3/8/14.
+//
+//
+
+#include "lifeObj.h"
+void lifeObj::createLifeObj(const char* file, const char* name){
+    createBaseObj(file, name);
+}
+
+void lifeObj::turnAround(){
+    if(dir == forward){
+        rootObj->setScaleX(-1);
+        dir = backward;
+    }else{
+        rootObj->setScaleX(1);
+        dir = forward;
+    }
+}
+void lifeObj::excuteAction(Action* action){
+    rootObj->stopAllActions();
+    rootObj->runAction(action);
+}
+
+void lifeObj::actionWalk(Point destination){
+    //testODClient();
+    hiderootObjAction();
+    //walk->setVisible(true);
+    
+    int speed = 200;
+    //destination = getPointInMap(destination);
+    
+    float distance = sqrtf((destination.x - rootObj->getPositionX()) * (destination.x - rootObj->getPositionX()) +
+                           (destination.y - rootObj->getPositionY()) * (destination.y - rootObj->getPositionY()));
+    float dur = distance / speed;
+    
+    if((destination.x < rootObj->getPosition().x && dir == forward) || (destination.x > rootObj->getPosition().x && dir == backward)){
+        turnAround();
+    }
+    
+    MoveTo* moveTo = MoveTo::create(dur, destination);
+    Sequence* seq = Sequence::create(moveTo, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
+    
+    excuteAction(seq);
+}
+
+void lifeObj::actionJump(){
+    hiderootObjAction();
+    //jump->setVisible(true);
+    
+    int distance = 40;
+    Point origin = rootObj->getPosition();
+    
+    //JumpTo* jumpTo = JumpTo::cre
+    JumpBy* jumpBy = JumpBy::create(0.3, rootObj->getPosition(), distance, 1);
+    //Point destination = pAdd(rootObj->getPosition(), p(0, distance));
+    //MoveTo* moveTo = MoveTo::create(0.2, destination);
+    //MoveTo* moveBack = MoveTo::create(0.1, origin);
+    Sequence* seq = Sequence::create(jumpBy, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
+    
+    excuteAction(seq);
+}
+
+void lifeObj::actionRusn(Edirection opDir){
+    hiderootObjAction();
+    //rush->setVisible(true);
+    
+    if(dir != opDir){
+        turnAround();
+    }
+    //int speed = 10;
+    int flag = 1;
+    if(dir == forward) flag = 1;
+    else flag = -1;
+    int distance = 40;
+    
+    Point destination = ccpAdd(rootObj->getPosition(), ccp(distance * flag, 0));
+    //destination = getPointInMap(destination);
+    
+    MoveTo* moveTo = MoveTo::create(0.2, destination);
+    Sequence* seq = Sequence::create(moveTo, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
+    
+    excuteAction(seq);
+}
+
+void lifeObj::actionAttack(){
+    rootObj->stopAllActions();
+    hiderootObjAction();
+    //attack->setVisible(true);
+    
+    Sequence* seq = Sequence::create(DelayTime::create(0.5), CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
+    excuteAction(seq);
+}
+
+void lifeObj::hiderootObjAction(){
+//    if(stand) stand->setVisible(false);
+//    if(walk) walk->setVisible(false);
+//    if(jump) jump->setVisible(false);
+//    if(attack) attack->setVisible(false);
+//    if(rush) rush->setVisible(false);
+}
+
+void lifeObj::moveAway(Rect rect){
+    //this->getrootObj()->stopAllActions();
+    
+//    short dirIndex = rand() % 8;
+//    Point calPos = ccpAdd(this->getrootObj()->getPosition(), ccp((float)_hardDir[dirIndex][0], (float)_hardDir[dirIndex][1]));
+    //dirIndex += 2;
+    //if(dirIndex >= 6) dirIndex = 0;
+    //actionWalk(calPos);
+    Point pt = this->getrootObj()->getPosition();
+    if (pt.x > rect.origin.x) {
+        pt.x = rect.origin.x + rect.size.width;
+    } else if(pt.x < rect.origin.x){
+        pt.x = rect.origin.x - rect.size.width;
+    }
+    this->getrootObj()->setPosition(pt);
+    CCLOG("%f %f",pt.x, pt.y);
+    CCLOG("%f %f",rect.origin.x, rect.origin.y);
+}
+
+void lifeObj::hurt(float deltaAngle, float hp){
+    RotateTo* rotateBy_1 = RotateTo::create(0.2, deltaAngle);
+    RotateTo* rotateBy_2 = RotateTo::create(0.2, 0);
+    Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
+    //Repeat* repeat = Repeat::create(seq, 1);
+    
+    
+    float te = hpProgress->getPercentage();
+    float totalHp = (1 + 1 - hpProgress->getPercentage() / 100) * this->hp;
+    ProgressTo* progressTo = ProgressTo::create(0.2, (this->hp - hp) / totalHp * 100);
+    this->hp -= hp;
+    hpProgress->runAction(progressTo);
+    
+    
+    rootObj->stopAllActions();
+    rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
+}
+
+void lifeObj::die(int flag){
+    rootObj->stopAllActions();
+    
+    SkewTo* sk = SkewTo::create(0.2, 0, 10);
+    
+    RotateTo* rotateTo = RotateTo::create(0.2, 90 * flag);
+    
+    Spawn* spawn = Spawn::create(sk, rotateTo, NULL);
+    
+    hpProgress->setPercentage(0);
+    
+    rootObj->runAction(spawn);
+}
+
+Animation* lifeObj::createAnimateWithFileNames(const char* str, int amount){
+    
+    Vector<SpriteFrame*> frames;
+    for(auto i = 1; i <= amount; ++i){
+        __String* fileName = String::createWithFormat(str, i);
+        Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(fileName->getCString());
+        if (texture)
+        {
+            Rect rect = Rect::ZERO;
+            rect.size = texture->getContentSize();
+            SpriteFrame* frame = SpriteFrame::create(fileName->getCString(), rect);
+            frames.pushBack(frame);
+        }
+    }
+    Animation* animate = Animation::createWithSpriteFrames(frames, 0.2);
+    
+    return animate;
+}
+

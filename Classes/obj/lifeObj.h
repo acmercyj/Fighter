@@ -89,9 +89,12 @@ public:
     
     Animation* createAnimateWithFileNames(const char* str, int amount);
     
+    virtual Rect getShadowRect() = 0;
+    
 protected:
     Edirection dir;
     
+    CC_SYNTHESIZE(Sprite*, shadow, Shadow);
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);
     Animation* stand;

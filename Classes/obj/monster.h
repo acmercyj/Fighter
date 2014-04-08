@@ -26,6 +26,8 @@ public:
     
     void actionAttack();
     
+    virtual Rect getShadowRect();
+    
     CC_SYNTHESIZE(int, id, ID);
 };
 

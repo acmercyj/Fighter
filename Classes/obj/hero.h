@@ -25,6 +25,8 @@ public:
         lifeObj::hurt(-15);
     };
     
+    virtual Rect getShadowRect();
+    
     virtual void die(){
         lifeObj::die(-1);
     };

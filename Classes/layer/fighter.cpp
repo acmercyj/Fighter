@@ -128,29 +128,12 @@ void LCBattleScene::update(float duration){
     tree->clear();
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
-        
-        int rd = rand()%2;
-        if (rd) {
-            Point ptm = obj->getrootObj()->getPosition();
-            Point pt = hero->getrootObj()->getPosition();
-            if (ptm.x < pt.x + 200) {
-                ptm.x += 1;
-            } else {
-                ptm.x -= 1;
-            }
-            if (ptm.y < pt.y ) {
-                ptm.y += 1;
-            } else {
-                ptm.y -= 1;
-            }
-            obj->getrootObj()->setPosition(ptm);
-        }
-        
-        tree->addObject((Node*)obj);
+        tree->addObject(obj);
     }
-//    tree->addObject(hero);
+    tree->addObject(hero);
 
     __Array* arr = __Array::create();
+    
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
         tree->getCollisionObjects(monster, arr);
@@ -159,10 +142,10 @@ void LCBattleScene::update(float duration){
             
             if(monster == monster_1) continue;
             
-            Rect rec = monster->getrootObj()->getBoundingBox();
-            Rect rec_1 = ((lifeObj*)monster_1)->getrootObj()->getBoundingBox();
+            Rect rec = monster->getShadowRect();
+            Rect rec_1 = ((lifeObj*)monster_1)->getShadowRect();
             if(rec.intersectsRect(rec_1)){
-                ((lifeObj*)monster_1)->moveAway(hero->getrootObj()->boundingBox());//(ccp(flag * 20, flag * 20));
+                ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
                 CCLOG("cllo");
             }
         }

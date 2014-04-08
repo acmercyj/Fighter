@@ -62,7 +62,7 @@ void QuadTree::clearTree(QuadTree *tree) {
 
 bool QuadTree::addObject(Node* node) {
     lifeObj* obj = (lifeObj*)node;
-    Rect rec = obj->getrootObj()->boundingBox();
+    Rect rec = obj->getShadowRect();
     bool isInsert = false;
     if (isRecAContainsRecB(mRect, rec)) {
         for (int i = 0 ; i < BRANCH; i++) {
@@ -90,7 +90,7 @@ bool QuadTree::isRecAContainsRecB(Rect recA, Rect recB) {
 
 void QuadTree::getCollisionObjects(Node *node, __Array *result) {
     lifeObj* obj = (lifeObj*)node;
-    Rect rec = obj->getrootObj()->boundingBox();
+    Rect rec = obj->getShadowRect();
     //CCRect rec = node->boundingBox();
     if (isRecAContainsRecB(mRect, rec)) {
         result->addObjectsFromArray(mObjArray);

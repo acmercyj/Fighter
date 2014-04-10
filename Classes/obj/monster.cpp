@@ -40,11 +40,9 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->getrootObj()->addChild(l);
     
     monster->shadow = Sprite::create();
-    monster->shadow->setTextureRect(Rect(0, 0, 75, 28));
     
-    monster->shadow->setPosition(Point(monster->rootObj->getContentSize().width / 2 + 20, 0));
-    monster->rootObj->addChild(monster->shadow);
-    
+    //monster->rootObj->addChild(monster->shadow);
+    target->addChild(monster->shadow);
     return monster;
 }
 
@@ -57,8 +55,13 @@ void ObjMonster::actionStand(){
 }
 
 Rect ObjMonster::getShadowRect(){
-    Rect rec = Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 + 20, rootObj->getPositionY(), 75, 28);
-    return Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 + 20, rootObj->getPositionY(), 75, 28);
+    Rect rec = Rect(rootObj->getPositionX() - rootObj->getContentSize().width / 2.0f + 100, rootObj->getPositionY(), 75, 28);
+    
+    shadow->setTextureRect(rec);
+    
+    shadow->setPosition(Point(rec.origin.x + rec.size.width / 2.0f, rec.origin.y + rec.size.height / 2.0f));
+    
+    return rec;//Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 + 20, rootObj->getPositionY(), 75, 28);
 }
 
 void ObjMonster::actionWalk(Point destination){

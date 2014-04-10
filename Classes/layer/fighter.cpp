@@ -154,27 +154,27 @@ void LCBattleScene::update(float duration){
 
 void LCBattleScene::test(float d){
     
-    Label* l = Label::create("100", "fzcy.ttf", 30);
-    //Label* l = Label::create();
-    l->setString("100");
-    l->setPosition(Point(10, 20));
-    this->addChild(l);
-    //sp->addChild(l);
-    
-    Sprite* sp = Sprite::create("Hero1.png");
-    
-    sp->setAnchorPoint(Point(0.5, 0));
-    sp->setPosition(getCenterPos());
-    
-    this->addChild(sp);
-    
-    RotateBy* rotateBy_1 = RotateBy::create(1, 90);
-    RotateBy* rotateBy_2 = RotateBy::create(1, -90);
-    Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
-    //Repeat* repeat = Repeat::create(seq, 1);
-    
-    sp->stopAllActions();
-    sp->runAction(seq);
+//    Label* l = Label::create("100", "fzcy.ttf", 30);
+//    //Label* l = Label::create();
+//    l->setString("100");
+//    l->setPosition(Point(10, 20));
+//    this->addChild(l);
+//    //sp->addChild(l);
+//    
+//    Sprite* sp = Sprite::create("Hero1.png");
+//    
+//    sp->setAnchorPoint(Point(0.5, 0));
+//    sp->setPosition(getCenterPos());
+//    
+//    this->addChild(sp);
+//    
+//    RotateBy* rotateBy_1 = RotateBy::create(1, 90);
+//    RotateBy* rotateBy_2 = RotateBy::create(1, -90);
+//    Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
+//    //Repeat* repeat = Repeat::create(seq, 1);
+//    
+//    sp->stopAllActions();
+//    sp->runAction(seq);
     
 }
 
@@ -262,6 +262,7 @@ Point LCBattleScene::getCenterPos(){
 void LCBattleScene::initView()
 {
     backGround = Sprite::create("BackGround.png");
+    backGround->setScale(3);
     this->addChild(backGround);
     
     Size visibleSize = Director::getInstance()->getVisibleSize();

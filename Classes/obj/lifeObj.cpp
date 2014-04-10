@@ -104,19 +104,34 @@ void lifeObj::hiderootObjAction(){
 }
 
 void lifeObj::moveAway(Rect rect){
-    //this->getrootObj()->stopAllActions();
+    Point pt = getrootObj()->getPosition();
     
-//    short dirIndex = rand() % 8;
-//    Point calPos = ccpAdd(this->getrootObj()->getPosition(), ccp((float)_hardDir[dirIndex][0], (float)_hardDir[dirIndex][1]));
-    //dirIndex += 2;
-    //if(dirIndex >= 6) dirIndex = 0;
-    //actionWalk(calPos);
-    Point pt = this->getrootObj()->getPosition();
+    Point ot = Point(rect.origin.x + rect.size.width / 2.0f, rect.origin.y + rect.size.height / 2.0f);
+    Rect selfRec = getShadowRect();
+ //   Point pt = selfRec.origin;
+//    float lx = rect.size.width / 2 + selfRec.size.width / 2;
+//    float ly = rect.size.height / 2 + selfRec.size.width / 2;
+//    
+//    float dx = selfRec.origin.x - rect.origin.x;
+//    //dx = dx < 0 ? -dx : dx;
+//    float dy = selfRec.origin.y - rect.origin.y;
+//    //dy = dy < 0 ? -dy : dy;
+//    
+//    Point des = Point(dx - absf rect.origin.x - selfRec.origin.x)
+//    
+//    Point selfLeftB = Point(selfRec.origin.x - selfRec.size.width / 2, selfRec.origin.y - selfRec.size.height / 2);
+    
     if (pt.x > rect.origin.x) {
-        pt.x = rect.origin.x + rect.size.width;
+        pt.x = rect.origin.x + rect.size.width + selfRec.size.width / 2.0f;
     } else if(pt.x < rect.origin.x){
-        pt.x = rect.origin.x - rect.size.width;
+        pt.x = rect.origin.x - rect.size.width - selfRec.size.width / 2.0f;
     }
+    if (pt.y > rect.origin.y) {
+        pt.y = rect.origin.y + rect.size.height + selfRec.size.height / 2.0f;
+    } else if(pt.y < rect.origin.y){
+        pt.y = rect.origin.y - rect.size.height - selfRec.size.height / 2.0f;
+    }
+    
     this->getrootObj()->setPosition(pt);
     CCLOG("%f %f",pt.x, pt.y);
     CCLOG("%f %f",rect.origin.x, rect.origin.y);

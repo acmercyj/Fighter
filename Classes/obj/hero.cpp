@@ -36,10 +36,11 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     
     
     hero->shadow = Sprite::create();
-    hero->shadow->setTextureRect(Rect(0, 0, 122, 30));
+    target->addChild(hero->shadow);
+    //hero->shadow->setTextureRect(Rect(0, 0, 122, 30));
     
-    hero->shadow->setPosition(Point(hero->rootObj->getContentSize().width / 2 - 15, 0));
-    hero->rootObj->addChild(hero->shadow);
+    //hero->shadow->setPosition(Point(hero->rootObj->getContentSize().width / 2 - 15, 0));
+    //hero->rootObj->addChild(hero->shadow);
     
     
     return hero;
@@ -47,7 +48,11 @@ ObjHero* ObjHero::create(Node* target, Point pos){
 }
 
 Rect ObjHero::getShadowRect(){
-    return Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 - 15, rootObj->getPositionY(), 122, 30);
+    
+    Rect rec = Rect(rootObj->getPositionX() - rootObj->getContentSize().width / 2.0f - 15, rootObj->getPositionY(), 122, 30);
+    shadow->setTextureRect(rec);
+    shadow->setPosition(Point(rec.origin.x + rec.size.width / 2.0f, rec.origin.y + rec.size.height / 2.0f));
+    return rec;
 }
 
 void ObjHero::actionStand(){

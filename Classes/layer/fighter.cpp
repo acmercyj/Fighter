@@ -41,16 +41,11 @@ LCBattleScene::~LCBattleScene()
 
 Scene* LCBattleScene::createScene()
 {
-    auto scene = Scene::createWithPhysics();
-    //scene->getPhysicsWorld()->setDebugDraw(true); //此句仅3.0 alpha0 有效
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    
     // 'scene' is an autorelease object
-    //auto scene = Scene::create();
+    auto scene = Scene::create();
     
     // 'layer' is an autorelease object
     auto layer = LCBattleScene::create();
-    layer->setWorld(scene->getPhysicsWorld());
     // add layer as a child to scene
     scene->addChild(layer);
     
@@ -250,8 +245,6 @@ void LCBattleScene::createHero(){
     hero->actionStand();
     
     hero->getrootObj()->setTag(ETagHero);
-    //auto body = PhysicsBody::createBox(hero->getrootObj()->getContentSize());
-    //hero->getrootObj()->setPhysicsBody(body);
 }
 
 Point LCBattleScene::getCenterPos(){
@@ -302,9 +295,6 @@ Point LCBattleScene::getPointInMap(Point pos){
 void LCBattleScene::addMonster(int amount){
     while(amount--) {
         addMonsterAtPosition(ccpAdd(getCenterPos(), Point(rand() % 50, rand() % 60)));
-        //ObjMonster* monster = ObjMonster::create(this, getCenterPos());//new ObjMonster();
-        //monster->actionStand();
-        //monsterArr->addObject(monster);
     }
 }
 
@@ -318,39 +308,6 @@ void LCBattleScene::followHero(float duration){
 void LCBattleScene::backClicked(){
 }
 
-void LCBattleScene::setPhysicsBody(PhysicsBody* body)
-{
-    _physicsBody = body;
-    _physicsBody->retain();
-    
-    
-    //_physicsBody->setPositionOffset(Point(0, 0));
-    //_physicsBody->setRotationOffset(Point(0, 0));
-    _physicsBody->setRotationEnable(false);
-    // _physicsBody->set = this;
-    // auto contactListener = EventListenerPhysicsContactWithBodies::create(platform->getPhysicsBody(), ball->getPhysicsBody());
-    // contactListener->onContactBegin = CC_CALLBACK_1(LCBattleScene::onContactBegin, this);
-    // _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
-}
-
-bool LCBattleScene::onContactBegin(EventCustom* event, const PhysicsContact& contact)
-{
-    auto spriteA = (Sprite*)contact.getShapeA()->getBody()->getNode();
-    auto spriteB = (Sprite*)contact.getShapeB()->getBody()->getNode();
-    
-    if (spriteA->getTag() == 1)
-    {
-        spriteA->removeFromParentAndCleanup(true);
-    }
-    
-    if (spriteB->getTag() == 1)
-    {
-        spriteB->removeFromParentAndCleanup(true);
-    }
-    
-    return true;
-}
-
 void LCBattleScene::addMonsterAtPosition(Point p)
 {
     ObjMonster* monster = ObjMonster::create(backGround, p, monsterArr->count() + 1);//new ObjMonster();
@@ -361,6 +318,4 @@ void LCBattleScene::addMonsterAtPosition(Point p)
     monsterArr->addObject(monster);
     
     monster->getrootObj()->setTag(ETagMonster);
-    //auto body = PhysicsBody::createBox(monster->getrootObj()->getContentSize());
-    //monster->getrootObj()->setPhysicsBody(body);
 }

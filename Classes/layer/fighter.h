@@ -38,16 +38,7 @@ public:
     virtual void update(float duration);
     
 public:
-    
-    //void onTouchesEnded(const std::vector<cocos2d::Touch*>& touches, cocos2d::Event *event);
-    
     void addMonsterAtPosition(cocos2d::Point p);
-    
-    void setPhysicsBody(cocos2d::PhysicsBody* body);
-    
-    bool onContactBegin(EventCustom* event, const PhysicsContact& contact);
-    
-    //void onEnter();
     
     void test(float d);
     
@@ -90,7 +81,6 @@ public:
     ObjHero* hero;
 private:
     CREATE_FUNC(LCBattleScene);
-    CC_SYNTHESIZE(cocos2d::PhysicsWorld*, world, World);
     
 private:
     QuadTree* tree;

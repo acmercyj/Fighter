@@ -63,6 +63,7 @@ Rect ObjHero::getShadowRect(){
 void ObjHero::actionStand(){
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_STAND);
     Animation* stand = createAnimateWithFileNames("Hero%d.png", 3);
     auto action = Animate::create(stand);
     rootObj->runAction(RepeatForever::create(action));
@@ -74,6 +75,7 @@ void ObjHero::actionWalk(Node* target, Point des){
     
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_WALK);
     if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
         turnAround();
     }
@@ -93,14 +95,14 @@ void ObjHero::actionWalk(Node* target, Point des){
 }
 
 void ObjHero::actionRusn(){
-    
+    if(getState() == EobjState::E_RUSH) return;
     assert(rootObj);
     rootObj->stopAllActions();
-    
+    setState(EobjState::E_RUSH);
     int flag = 1;
     if(dir == EDIR_FORWARD) flag = 1;
     else flag = -1;
-    int distance = 40;
+    int distance = 60;
     
     Point p = ccpAdd(rootObj->getPosition(), ccp(distance * flag, 0));
     
@@ -110,14 +112,16 @@ void ObjHero::actionRusn(){
     
     rootObj->runAction(actionRush);
     
-    MoveTo* moveTo = MoveTo::create(0.2, getPointInMap(p));
+    MoveTo* moveTo = MoveTo::create(0.3, getPointInMap(p));
     
     rootObj->runAction(CCSequence::create(moveTo, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
 }
 
 void ObjHero::actionAttack(){
+    if(getState() == EobjState::E_ATTACK) return;
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_ATTACK);
     Animation* attack = createAnimateWithFileNames("HeroAttack%d.png", 5);
     attack->setDelayPerUnit(0.1);
     auto action = Animate::create(attack);

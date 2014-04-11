@@ -23,6 +23,7 @@ enum Edirection
 enum class EobjState{
     E_STAND,
     E_ATTACK,
+    E_WALK,
     E_HURT,
     E_RUSH
 };
@@ -82,6 +83,8 @@ public:
     virtual void actionStand() = 0;
     
     virtual void turnAround();
+    
+    virtual void actionAttack() {};
     
     void moveAway(Rect rect);
     

@@ -47,6 +47,7 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
 void ObjMonster::actionStand(){
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_STAND);
     Animation* stand = createAnimateWithFileNames("Robot%d.png", 3);
     auto action = Animate::create(stand);
     rootObj->runAction(RepeatForever::create(action));
@@ -79,6 +80,7 @@ void ObjMonster::actionWalk(Point des){
     
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_WALK);
     if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
         turnAround();
     }
@@ -98,12 +100,13 @@ void ObjMonster::actionWalk(Point des){
 }
 
 void ObjMonster::actionAttack(){
+    if(getState() == EobjState::E_ATTACK) return;
     assert(rootObj);
     rootObj->stopAllActions();
+    setState(EobjState::E_ATTACK);
     Animation* attack = createAnimateWithFileNames("RobotAttack%d.png", 5);
     attack->setDelayPerUnit(0.1);
     auto action = Animate::create(attack);
     
     rootObj->runAction(CCSequence::create(action, CallFunc::create( CC_CALLBACK_0(ObjMonster::actionStand,this)), NULL));
-    
 }

@@ -20,6 +20,14 @@ enum Edirection
     EDIR_BACKWARD
 };
 
+enum class EobjState{
+    E_STAND,
+    E_ATTACK,
+    E_HURT,
+    E_RUSH
+};
+
+
 const int _hardDir[2][4] = {1, 1, -1, -1, -1, 1, 1, -1};
 
 class baseObj
@@ -57,7 +65,7 @@ protected:
 class lifeObj : public Sprite , public baseObj
 {
 public:
-    lifeObj() {}
+    lifeObj() : objState(EobjState::E_STAND){}
     ~lifeObj() {
         CC_SAFE_RELEASE_NULL(rootObj);
     }
@@ -65,15 +73,11 @@ public:
     
     void createLifeObj(const char* file, const char* name);
     
-    //virtual bool init();
-    
-    void excuteAction(Action* action);
-    
     virtual void actionWalk(Point destination){};
     
     void actionJump();
     
-    void actionAttack();
+    //void actionAttack();
     
     virtual void actionStand() = 0;
     
@@ -93,13 +97,21 @@ public:
     
     //virtual void setCollisionRectVisible(bool visible){}
     
+public:
+    void setActiveRange(Size range){
+        lifeObj::activeRange = range;
+    }
 protected:
     Edirection dir;
+    
+    CC_SYNTHESIZE(EobjState, objState, State);
     
     CC_SYNTHESIZE(Sprite*, shadow, Shadow);
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);
-    CC_SYNTHESIZE(Size, activeRange, ActiveRange);
+    //CC_SYNTHESIZE(Size, activeRange, ActiveRange);
+    
+    static Size activeRange;
     //CC_SYNTHESIZE(int, dirIndex, DirIndex);
 };
 

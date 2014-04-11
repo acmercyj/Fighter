@@ -7,6 +7,8 @@
 //
 
 #include "lifeObj.h"
+Size lifeObj::activeRange = Size(0, 0);
+
 void lifeObj::createLifeObj(const char* file, const char* name){
     createBaseObj(file, name);
 }
@@ -21,34 +23,20 @@ void lifeObj::turnAround(){
     }
 }
 
-void lifeObj::excuteAction(Action* action){
-    rootObj->stopAllActions();
-    rootObj->runAction(action);
-}
-
 void lifeObj::actionJump(){
     //jump->setVisible(true);
     
-    int distance = 40;
-    Point origin = rootObj->getPosition();
+    //int distance = 40;
+    //Point origin = rootObj->getPosition();
     
     //JumpTo* jumpTo = JumpTo::cre
-    JumpBy* jumpBy = JumpBy::create(0.3, rootObj->getPosition(), distance, 1);
+    //JumpBy* jumpBy = JumpBy::create(0.3, rootObj->getPosition(), distance, 1);
     //Point destination = pAdd(rootObj->getPosition(), p(0, distance));
     //MoveTo* moveTo = MoveTo::create(0.2, destination);
     //MoveTo* moveBack = MoveTo::create(0.1, origin);
-    Sequence* seq = Sequence::create(jumpBy, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
+    //Sequence* seq = Sequence::create(jumpBy, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
     
-    excuteAction(seq);
-}
-
-void lifeObj::actionAttack(){
-    rootObj->stopAllActions();
     
-    //attack->setVisible(true);
-    
-    Sequence* seq = Sequence::create(DelayTime::create(0.5), CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
-    excuteAction(seq);
 }
 
 void lifeObj::moveAway(Rect rect){

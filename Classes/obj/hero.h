@@ -22,7 +22,7 @@ public:
     static ObjHero* create(Node* target, Point pos);
     
     virtual void actionStand();
-    
+    void actionRusn();
     virtual void actionWalk(Node* target, Point destination);
     
     virtual void hurt(){

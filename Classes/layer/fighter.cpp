@@ -82,17 +82,6 @@ bool LCBattleScene::init()
 
 void LCBattleScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
     CCLOG("%d", keyCode);
-    if((int)keyCode == 32){
-        hero->hurt();
-        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
-        monster->hurt();
-        
-        //hero->getrootObj()->setRotation(45);
-    }else if ((int)keyCode == 's'){
-        hero->die();
-        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
-        monster->die();
-    }
 }
 
 void LCBattleScene::update(float duration){
@@ -175,6 +164,20 @@ void LCBattleScene::test(float d){
 
 void LCBattleScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event){
     CCLOG("%c", keyCode);
+    if((int)keyCode == 32){
+        
+        hero->actionRusn();
+        
+//        hero->hurt();
+//        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
+//        monster->hurt();
+        
+        //hero->getrootObj()->setRotation(45);
+    }else if ((int)keyCode == 's'){
+        hero->die();
+        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
+        monster->die();
+    }
 }
 
 void LCBattleScene::onMouseDown(Event *event)

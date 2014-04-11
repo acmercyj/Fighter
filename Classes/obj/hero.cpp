@@ -35,8 +35,10 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     hero->getrootObj()->addChild(hero->hpProgress);
     
     
+#ifndef HIDE_COLLISION_RECT
     hero->shadow = Sprite::create();
     target->addChild(hero->shadow);
+#endif
     //hero->shadow->setTextureRect(Rect(0, 0, 122, 30));
     
     //hero->shadow->setPosition(Point(hero->rootObj->getContentSize().width / 2 - 15, 0));
@@ -50,8 +52,11 @@ ObjHero* ObjHero::create(Node* target, Point pos){
 Rect ObjHero::getShadowRect(){
     
     Rect rec = Rect(rootObj->getPositionX() - rootObj->getContentSize().width / 2.0f - 15, rootObj->getPositionY(), 122, 30);
+    
+#ifndef HIDE_COLLISION_RECT
     shadow->setTextureRect(rec);
     shadow->setPosition(Point(rec.origin.x + rec.size.width / 2.0f, rec.origin.y + rec.size.height / 2.0f));
+#endif
     return rec;
 }
 
@@ -87,6 +92,29 @@ void ObjHero::actionWalk(Node* target, Point des){
     //target->runAction(Follow::create(rootObj));
 }
 
+void ObjHero::actionRusn(){
+    
+    assert(rootObj);
+    rootObj->stopAllActions();
+    
+    int flag = 1;
+    if(dir == EDIR_FORWARD) flag = 1;
+    else flag = -1;
+    int distance = 40;
+    
+    Point p = ccpAdd(rootObj->getPosition(), ccp(distance * flag, 0));
+    
+    Animation* rush = createAnimateWithFileNames("HeroAttackT%d.png", 3);
+    rush->setDelayPerUnit(0.1);
+    auto actionRush = Animate::create(rush);
+    
+    rootObj->runAction(actionRush);
+    
+    MoveTo* moveTo = MoveTo::create(0.2, getPointInMap(p));
+    
+    rootObj->runAction(CCSequence::create(moveTo, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
+}
+
 void ObjHero::actionAttack(){
     assert(rootObj);
     rootObj->stopAllActions();
@@ -95,5 +123,4 @@ void ObjHero::actionAttack(){
     auto action = Animate::create(attack);
     
     rootObj->runAction(CCSequence::create(action, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
-    
 }

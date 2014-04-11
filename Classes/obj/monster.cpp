@@ -37,11 +37,10 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     //l->setString(String::createWithFormat("%d", id)->getCString());
     //l->setPosition(Point(0, 200));
     //monster->getrootObj()->addChild(l);
-    
+#ifndef HIDE_COLLISION_RECT
     monster->shadow = Sprite::create();
-    
-    //monster->rootObj->addChild(monster->shadow);
     target->addChild(monster->shadow);
+#endif
     return monster;
 }
 
@@ -66,9 +65,10 @@ void ObjMonster::turnAround(){
 Rect ObjMonster::getShadowRect(){
     Rect rec = Rect(rootObj->getPositionX() - rootObj->getContentSize().width / 2.0f + 100, rootObj->getPositionY(), 75, 28);
     
+#ifndef HIDE_COLLISION_RECT
     shadow->setTextureRect(rec);
-    
     shadow->setPosition(Point(rec.origin.x + rec.size.width / 2.0f, rec.origin.y + rec.size.height / 2.0f));
+#endif
     
     return rec;//Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 + 20, rootObj->getPositionY(), 75, 28);
 }

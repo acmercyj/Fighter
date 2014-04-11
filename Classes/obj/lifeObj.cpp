@@ -26,30 +26,7 @@ void lifeObj::excuteAction(Action* action){
     rootObj->runAction(action);
 }
 
-void lifeObj::actionWalk(Point destination){
-    //testODClient();
-    hiderootObjAction();
-    //walk->setVisible(true);
-    
-    int speed = 200;
-    //destination = getPointInMap(destination);
-    
-    float distance = sqrtf((destination.x - rootObj->getPositionX()) * (destination.x - rootObj->getPositionX()) +
-                           (destination.y - rootObj->getPositionY()) * (destination.y - rootObj->getPositionY()));
-    float dur = distance / speed;
-    
-    if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
-        turnAround();
-    }
-    
-    MoveTo* moveTo = MoveTo::create(dur, destination);
-    Sequence* seq = Sequence::create(moveTo, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
-    
-    excuteAction(seq);
-}
-
 void lifeObj::actionJump(){
-    hiderootObjAction();
     //jump->setVisible(true);
     
     int distance = 40;
@@ -65,43 +42,13 @@ void lifeObj::actionJump(){
     excuteAction(seq);
 }
 
-void lifeObj::actionRusn(Edirection opDir){
-    hiderootObjAction();
-    //rush->setVisible(true);
-    
-    if(dir != opDir){
-        turnAround();
-    }
-    //int speed = 10;
-    int flag = 1;
-    if(dir == EDIR_FORWARD) flag = 1;
-    else flag = -1;
-    int distance = 40;
-    
-    Point destination = ccpAdd(rootObj->getPosition(), ccp(distance * flag, 0));
-    //destination = getPointInMap(destination);
-    
-    MoveTo* moveTo = MoveTo::create(0.2, destination);
-    Sequence* seq = Sequence::create(moveTo, CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
-    
-    excuteAction(seq);
-}
-
 void lifeObj::actionAttack(){
     rootObj->stopAllActions();
-    hiderootObjAction();
+    
     //attack->setVisible(true);
     
     Sequence* seq = Sequence::create(DelayTime::create(0.5), CallFunc::create(this, callfunc_selector(lifeObj::actionStand)), NULL);
     excuteAction(seq);
-}
-
-void lifeObj::hiderootObjAction(){
-//    if(stand) stand->setVisible(false);
-//    if(walk) walk->setVisible(false);
-//    if(jump) jump->setVisible(false);
-//    if(attack) attack->setVisible(false);
-//    if(rush) rush->setVisible(false);
 }
 
 void lifeObj::moveAway(Rect rect){

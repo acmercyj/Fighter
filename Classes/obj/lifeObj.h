@@ -12,6 +12,8 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
+#define HIDE_COLLISION_RECT
+
 enum Edirection
 {
     EDIR_FORWARD,
@@ -67,17 +69,13 @@ public:
     
     void excuteAction(Action* action);
     
-    virtual void actionWalk(Point destination);
+    virtual void actionWalk(Point destination){};
     
     void actionJump();
-    
-    void actionRusn(Edirection opDir);
     
     void actionAttack();
     
     virtual void actionStand() = 0;
-    
-    void hiderootObjAction();
     
     virtual void turnAround();
     
@@ -93,6 +91,8 @@ public:
     
     Point getPointInMap(Point pos);
     
+    //virtual void setCollisionRectVisible(bool visible){}
+    
 protected:
     Edirection dir;
     
@@ -100,12 +100,6 @@ protected:
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);
     CC_SYNTHESIZE(Size, activeRange, ActiveRange);
-    Animation* stand;
-    Animation* walk;
-    Animation* jump;
-    Animation* attack;
-    Animation* rush;
-    
     //CC_SYNTHESIZE(int, dirIndex, DirIndex);
 };
 

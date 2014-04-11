@@ -13,6 +13,10 @@
 
 class ObjHero : public lifeObj
 {
+    ObjHero(){
+        dir = EDIR_FORWARD;
+    }
+    ~ObjHero(){}
 public:
     static float speed;
     static ObjHero* create(Node* target, Point pos);

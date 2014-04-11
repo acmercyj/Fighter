@@ -14,7 +14,9 @@
 class ObjMonster : public lifeObj
 {
 public:
-    ObjMonster() : id(0){}
+    ObjMonster() : id(0){
+        dir = EDIR_BACKWARD;
+    }
     ~ObjMonster() {}
     
     static float speed;
@@ -23,6 +25,8 @@ public:
     virtual void actionStand();
     
     virtual void actionWalk(Point destination);
+    
+    virtual void turnAround();
     
     void actionAttack();
     

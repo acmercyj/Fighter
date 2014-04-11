@@ -10,7 +10,7 @@
 #include "Util.h"
 
 LCBattleScene::LCBattleScene():
-dir(forward),
+//activeRange(nullptr),
 hero(NULL)
 {
     monsterArr = __Array::create();
@@ -193,8 +193,8 @@ void LCBattleScene::onMouseDown(Event *event)
 void LCBattleScene::onMouseUp(Event *event)
 {
     EventMouse* e = (EventMouse*)event;
-    world->setGravity(Point(0 ,-98));
-    world->setSpeed(1);
+    //world->setGravity(Point(0 ,-98));
+    //world->setSpeed(1);
 //    Vect vct = world->getGravity();
 //    float speed = world->getSpeed();
     // right clicked move hero
@@ -210,7 +210,8 @@ void LCBattleScene::onMouseUp(Event *event)
         
         //Point convertedToNodeLocation = backGround->convertToNodeSpace(pos);
         
-        hero->actionWalk(this, Point(e->getCursorX(), e->getCursorY()));
+        //Point p = getPointInMap();
+        hero->actionWalk(this, backGround->convertToNodeSpace(Point(e->getCursorX(), e->getCursorY())));
     }else if(e->getMouseButton() == 0){
         hero->actionAttack();
     }
@@ -243,8 +244,9 @@ void LCBattleScene::sendPosition(Point pos){
 }
 
 void LCBattleScene::createHero(){
-    hero = ObjHero::create(this, getCenterPos());
+    hero = ObjHero::create(backGround, getCenterPos());
     hero->retain();
+    hero->setActiveRange(backGround->getContentSize());
     hero->actionStand();
     
     hero->getrootObj()->setTag(ETagHero);
@@ -262,18 +264,19 @@ Point LCBattleScene::getCenterPos(){
 void LCBattleScene::initView()
 {
     backGround = Sprite::create("BackGround.png");
-    backGround->setScale(3);
+    //backGround->setScale(3);
     this->addChild(backGround);
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
     
-    //backGround->setScale(3);
     backGround->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
+    
     createHero();
     
     addMonster(3);
+    
+    schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     
     scheduleOnce(schedule_selector(LCBattleScene::test), 1);
     scheduleUpdate();
@@ -281,14 +284,17 @@ void LCBattleScene::initView()
 }
 
 Point LCBattleScene::getPointInMap(Point pos){
-    float halfWidth = activeRange->getContentSize().width / 2;
-    float halfHeight = activeRange->getContentSize().height / 2;
+    float minX = 0;
+    float maxX = backGround->getContentSize().width;
     
-    pos.x = pos.x > halfWidth ? halfWidth : pos.x;
-    pos.x = pos.x < -halfWidth ? -halfWidth : pos.x;
+    float minY = 0;
+    float maxY = backGround->getContentSize().height / 2;
     
-    pos.y = pos.y > halfHeight ? halfHeight : pos.y;
-    pos.y = pos.y < -halfHeight ? -halfHeight : pos.y;
+    pos.x = pos.x > maxX ? maxX : pos.x;
+    pos.x = pos.x < minX ? minX : pos.x;
+    
+    pos.y = pos.y > maxY ? maxY : pos.y;
+    pos.y = pos.y < minY ? minY : pos.y;
     
     return  pos;
 }
@@ -347,7 +353,9 @@ bool LCBattleScene::onContactBegin(EventCustom* event, const PhysicsContact& con
 
 void LCBattleScene::addMonsterAtPosition(Point p)
 {
-    ObjMonster* monster = ObjMonster::create(this, p, monsterArr->count() + 1);//new ObjMonster();
+    ObjMonster* monster = ObjMonster::create(backGround, p, monsterArr->count() + 1);//new ObjMonster();
+    
+    monster->setActiveRange(backGround->getContentSize());
     monster->actionStand();
     monster->setID(monsterArr->count() + 1);
     monsterArr->addObject(monster);

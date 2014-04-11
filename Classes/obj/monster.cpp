@@ -25,7 +25,6 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->setHP(100);
     monster->autorelease();
     
-    
     Sprite* sp = Sprite::create("RobotState1.png");
     monster->hpProgress = ProgressTimer::create(sp);
     monster->hpProgress->setType(ProgressTimer::Type::BAR);
@@ -34,10 +33,10 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->hpProgress->setPercentage(100);
     monster->getrootObj()->addChild(monster->hpProgress);
     
-    Label* l = Label::create(String::createWithFormat("%d", id)->getCString(), "fzcy.ttf", 30);
+    //Label* l = Label::create(String::createWithFormat("%d", id)->getCString(), "fzcy.ttf", 30);
     //l->setString(String::createWithFormat("%d", id)->getCString());
-    l->setPosition(Point(0, 200));
-    monster->getrootObj()->addChild(l);
+    //l->setPosition(Point(0, 200));
+    //monster->getrootObj()->addChild(l);
     
     monster->shadow = Sprite::create();
     
@@ -54,6 +53,16 @@ void ObjMonster::actionStand(){
     rootObj->runAction(RepeatForever::create(action));
 }
 
+void ObjMonster::turnAround(){
+    if(dir == EDIR_FORWARD){
+        rootObj->setScaleX(1);
+        dir = EDIR_BACKWARD;
+    }else{
+        rootObj->setScaleX(-1);
+        dir = EDIR_FORWARD;
+    }
+}
+
 Rect ObjMonster::getShadowRect(){
     Rect rec = Rect(rootObj->getPositionX() - rootObj->getContentSize().width / 2.0f + 100, rootObj->getPositionY(), 75, 28);
     
@@ -64,11 +73,15 @@ Rect ObjMonster::getShadowRect(){
     return rec;//Rect(rootObj->getPositionX() + rootObj->getContentSize().width / 2 + 20, rootObj->getPositionY(), 75, 28);
 }
 
-void ObjMonster::actionWalk(Point destination){
+void ObjMonster::actionWalk(Point des){
     
+    Point destination = getPointInMap(des);
     
     assert(rootObj);
     rootObj->stopAllActions();
+    if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
+        turnAround();
+    }
     Animation* walk = createAnimateWithFileNames("RobotRun%d.png", 6);
     walk->setDelayPerUnit(0.1);
     auto action = Animate::create(walk);

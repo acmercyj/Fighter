@@ -63,10 +63,15 @@ void ObjHero::actionStand(){
     rootObj->runAction(RepeatForever::create(action));
 }
 
-void ObjHero::actionWalk(Node* target, Point destination){
+void ObjHero::actionWalk(Node* target, Point des){
+    
+    Point destination = getPointInMap(des);
     
     assert(rootObj);
     rootObj->stopAllActions();
+    if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
+        turnAround();
+    }
     Animation* walk = createAnimateWithFileNames("HeroRun%d.png", 11);
     walk->setDelayPerUnit(0.1);
     auto action = Animate::create(walk);

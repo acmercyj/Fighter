@@ -12,14 +12,15 @@ void lifeObj::createLifeObj(const char* file, const char* name){
 }
 
 void lifeObj::turnAround(){
-    if(dir == forward){
+    if(dir == EDIR_FORWARD){
         rootObj->setScaleX(-1);
-        dir = backward;
+        dir = EDIR_BACKWARD;
     }else{
         rootObj->setScaleX(1);
-        dir = forward;
+        dir = EDIR_FORWARD;
     }
 }
+
 void lifeObj::excuteAction(Action* action){
     rootObj->stopAllActions();
     rootObj->runAction(action);
@@ -37,7 +38,7 @@ void lifeObj::actionWalk(Point destination){
                            (destination.y - rootObj->getPositionY()) * (destination.y - rootObj->getPositionY()));
     float dur = distance / speed;
     
-    if((destination.x < rootObj->getPosition().x && dir == forward) || (destination.x > rootObj->getPosition().x && dir == backward)){
+    if((destination.x < rootObj->getPosition().x && dir == EDIR_FORWARD) || (destination.x > rootObj->getPosition().x && dir == EDIR_BACKWARD)){
         turnAround();
     }
     
@@ -73,7 +74,7 @@ void lifeObj::actionRusn(Edirection opDir){
     }
     //int speed = 10;
     int flag = 1;
-    if(dir == forward) flag = 1;
+    if(dir == EDIR_FORWARD) flag = 1;
     else flag = -1;
     int distance = 40;
     
@@ -132,9 +133,11 @@ void lifeObj::moveAway(Rect rect){
         pt.y = rect.origin.y - rect.size.height - selfRec.size.height / 2.0f;
     }
     
-    this->getrootObj()->setPosition(pt);
-    CCLOG("%f %f",pt.x, pt.y);
-    CCLOG("%f %f",rect.origin.x, rect.origin.y);
+    Point des = getPointInMap(pt);
+    
+    this->getrootObj()->setPosition(des);
+    //CCLOG("%f %f",pt.x, pt.y);
+    //CCLOG("%f %f",rect.origin.x, rect.origin.y);
 }
 
 void lifeObj::hurt(float deltaAngle, float hp){
@@ -167,6 +170,22 @@ void lifeObj::die(int flag){
     hpProgress->setPercentage(0);
     
     rootObj->runAction(spawn);
+}
+
+Point lifeObj::getPointInMap(Point pos){
+    float minX = 0;
+    float maxX = activeRange.width;
+    
+    float minY = 0;
+    float maxY = activeRange.height / 2;
+    
+    pos.x = pos.x > maxX ? maxX : pos.x;
+    pos.x = pos.x < minX ? minX : pos.x;
+    
+    pos.y = pos.y > maxY ? maxY : pos.y;
+    pos.y = pos.y < minY ? minY : pos.y;
+    
+    return  pos;
 }
 
 Animation* lifeObj::createAnimateWithFileNames(const char* str, int amount){

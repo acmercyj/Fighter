@@ -76,9 +76,9 @@ private:
     
 private:
 	Sprite * backGround;
-    Sprite * activeRange;
+    //Sprite * activeRange;
     
-    Edirection dir;
+    //Edirection dir;
     
     
     bool moved;

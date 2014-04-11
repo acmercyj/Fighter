@@ -14,8 +14,8 @@ USING_NS_CC;
 
 enum Edirection
 {
-    forward,
-    backward
+    EDIR_FORWARD,
+    EDIR_BACKWARD
 };
 
 const int _hardDir[2][4] = {1, 1, -1, -1, -1, 1, 1, -1};
@@ -79,7 +79,7 @@ public:
     
     void hiderootObjAction();
     
-    void turnAround();
+    virtual void turnAround();
     
     void moveAway(Rect rect);
     
@@ -91,12 +91,15 @@ public:
     
     virtual Rect getShadowRect() = 0;
     
+    Point getPointInMap(Point pos);
+    
 protected:
     Edirection dir;
     
     CC_SYNTHESIZE(Sprite*, shadow, Shadow);
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);
+    CC_SYNTHESIZE(Size, activeRange, ActiveRange);
     Animation* stand;
     Animation* walk;
     Animation* jump;

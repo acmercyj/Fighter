@@ -34,9 +34,11 @@ public:
     virtual void die(){
         lifeObj::die(-1);
     };
-
     
     void actionAttack();
+    
+private:
+    CC_SYNTHESIZE(Point, destination, DesPoin);
 };
 
 #endif /* defined(__Card__hero__) */

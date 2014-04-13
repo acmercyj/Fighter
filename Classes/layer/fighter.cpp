@@ -169,13 +169,12 @@ void LCBattleScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event){
     CCLOG("%c", keyCode);
     if((int)keyCode == 32){
         
-        hero->actionRusn();
+        //hero->actionRusn();
         
-//        hero->hurt();
-//        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
-//        monster->hurt();
-        
-        //hero->getrootObj()->setRotation(45);
+        hero->hurt();
+        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
+        monster->hurt();
+
     }else if ((int)keyCode == 's'){
         hero->die();
         ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);

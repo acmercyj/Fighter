@@ -29,11 +29,11 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     Sprite* sp = Sprite::create("HeroState3.png");
     hero->hpProgress  = ProgressTimer::create(sp);
     hero->hpProgress->setType(ProgressTimer::Type::BAR);
+    hero->hpProgress->setBarChangeRate(ccp(1, 0));
     hero->hpProgress->setMidpoint(Point(0, 0.5));
     hero->hpProgress->setPosition(Point(hero->getrootObj()->getContentSize().width / 2, hero->getrootObj()->getContentSize().height + sp->getContentSize().height / 2));
     hero->hpProgress->setPercentage(100);
     hero->getrootObj()->addChild(hero->hpProgress);
-    
     
 #ifndef HIDE_COLLISION_RECT
     hero->shadow = Sprite::create();
@@ -63,6 +63,7 @@ Rect ObjHero::getShadowRect(){
 void ObjHero::actionStand(){
     assert(rootObj);
     rootObj->stopAllActions();
+    setDesPoin(rootObj->getPosition());
     setState(EobjState::E_STAND);
     Animation* stand = createAnimateWithFileNames("Hero%d.png", 3);
     auto action = Animate::create(stand);
@@ -87,6 +88,7 @@ void ObjHero::actionWalk(Node* target, Point des){
                            (destination.y - rootObj->getPositionY()) * (destination.y - rootObj->getPositionY()));
     float dur = distance / speed;
     
+    setDesPoin(des);
     auto moveTo = MoveTo::create(dur, destination);
     rootObj->runAction(RepeatForever::create(action));
     rootObj->runAction(CCSequence::create(moveTo, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));

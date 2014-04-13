@@ -71,7 +71,6 @@ private:
     
     //Edirection dir;
     
-    
     bool moved;
     
     EventListenerMouse* _mouseListener;

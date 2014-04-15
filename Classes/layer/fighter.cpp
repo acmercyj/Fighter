@@ -130,7 +130,7 @@ void LCBattleScene::update(float duration){
             Rect rec_1 = ((lifeObj*)monster_1)->getShadowRect();
             if(rec.intersectsRect(rec_1)){
                 ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
-                CCLOG("cllo");
+                //CCLOG("cllo");
                 
                 monster->actionAttack();
                 monster_1->actionAttack();
@@ -279,6 +279,7 @@ void LCBattleScene::initView()
     
     addMonster(3);
     
+    hero->objList = monsterArr;
     
     schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     

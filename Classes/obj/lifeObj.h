@@ -112,8 +112,10 @@ public:
     
     virtual Point getKeyPoint(Point exP) {
         
-        Point lp = map->convertToNodeSpace(keyPoint_l);
-        Point rp = map->convertToNodeSpace(keyPoint_r);
+        Point lp = Point(keyPoint_l.x + rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+        //map->convertToNodeSpace(keyPoint_l);
+        Point rp = Point(keyPoint_l.x + rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+        //map->convertToNodeSpace(keyPoint_r);
         Point p = exP.x > rp.x ? rp : lp;
         return p;
     }

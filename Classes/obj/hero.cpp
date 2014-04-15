@@ -134,13 +134,16 @@ void ObjHero::actionAttack(){
     
     rootObj->runAction(CCSequence::create(action, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
     
-   // scheduleOnce(schedule_selector(ObjHero::attackEffect), 0.2f);
-   // attackEffect
+    //scheduleOnce(schedule_selector(ObjHero::attackEffect), 0.2f);
+    attackEffect();
 }
 
-void ObjHero::attackEffect(__Array* objList){
+void ObjHero::attackEffect(){
+    //__Array* objList = objList;
     if(objList == NULL || objList->count() <= 0) return;
-    Point centerP = map->convertToNodeSpace(Point(rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2));
+    
+    Point centerP = Point(rootObj->getPositionX() + rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2);
+    //map->convertToNodeSpace(Point(rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2));
     float CR = rootObj->getContentSize().width / 2;
     
     Point up = Point(centerP.x + 1.0f, centerP.y);
@@ -152,10 +155,7 @@ void ObjHero::attackEffect(__Array* objList){
         if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, sqrtf(CR), cosTheta,
                                     kp.x, kp.y)){
             obj->hurt(getATK());
+            CCLOG("hit!!");
         }
     }
 }
-
-//Point ObjHero::getKeyPoint(){
-//    return <#expression#>
-//}

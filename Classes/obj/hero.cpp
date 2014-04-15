@@ -132,8 +132,8 @@ void ObjHero::actionAttack(){
     
     rootObj->runAction(CCSequence::create(action, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
     
-    scheduleOnce(schedule_selector(ObjHero::attackEffect), 0.2f);
-    attackEffect
+    //scheduleOnce(schedule_selector(ObjHero::attackEffect), 0.2f);
+    //attackEffect
 }
 
 void ObjHero::attackEffect(__Array* objList){

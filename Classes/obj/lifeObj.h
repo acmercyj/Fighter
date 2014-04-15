@@ -110,8 +110,12 @@ public:
     
     //virtual void setCollisionRectVisible(bool visible){}
     
-    virtual Point getKeyPoint() {
-        return map->convertToNodeSpace(keyPoint);
+    virtual Point getKeyPoint(Point exP) {
+        
+        Point lp = map->convertToNodeSpace(keyPoint_l);
+        Point rp = map->convertToNodeSpace(keyPoint_r);
+        Point p = exP.x > rp.x ? rp : lp;
+        return p;
     }
     
 public:
@@ -140,7 +144,8 @@ protected:
     
     static Sprite* map;
     
-    CC_SYNTHESIZE(Point, keyPoint, KeyPoint);
+    CC_SYNTHESIZE(Point, keyPoint_l, KeyPoint_l);
+    CC_SYNTHESIZE(Point, keyPoint_r, KeyPoint_r)
 };
 
 #endif /* defined(__Card__lifeObj__) */

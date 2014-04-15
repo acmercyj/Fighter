@@ -35,6 +35,7 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->hpProgress->setPercentage(100);
     monster->getrootObj()->addChild(monster->hpProgress);
     
+    monster->setKeyPoint(Point(0, monster->rootObj->getContentSize().height / 2));
     //Label* l = Label::create(String::createWithFormat("%d", id)->getCString(), "fzcy.ttf", 30);
     //l->setString(String::createWithFormat("%d", id)->getCString());
     //l->setPosition(Point(0, 200));

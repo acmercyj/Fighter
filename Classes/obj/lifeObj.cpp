@@ -9,6 +9,8 @@
 #include "lifeObj.h"
 Size lifeObj::activeRange = Size(0, 0);
 
+Sprite* lifeObj::map = NULL;
+
 void lifeObj::createLifeObj(const char* file, const char* name){
     createBaseObj(file, name);
 }
@@ -93,7 +95,8 @@ void lifeObj::hurt(float deltaAngle, float hp){
     rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
 }
 
-void lifeObj::die(int flag){
+void lifeObj::die(Ref* data){
+    int flag = 1;
     rootObj->stopAllActions();
     
     SkewTo* sk = SkewTo::create(0.2, 0, 10);
@@ -142,3 +145,53 @@ Animation* lifeObj::createAnimateWithFileNames(const char* str, int amount){
     return animate;
 }
 
+// Bit trick
+bool lifeObj::IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
+                              float px, float py)
+{
+    assert(cosTheta > -1 && cosTheta < 1);
+    assert(squaredR > 0.0f);
+    
+    // D = P - C
+    float dx = px - cx;
+    float dy = py - cy;
+    
+    // |D|^2 = (dx^2 + dy^2)
+    float squaredLength = dx * dx + dy * dy;
+    
+    // |D|^2 > r^2
+    if (squaredLength > squaredR)
+        return false;
+    
+    // D dot U
+    float DdotU = dx * ux + dy * uy;
+    
+    // D dot U > |D| cos(theta)
+    // <=>
+    // (D dot U)^2 > |D|^2 (cos(theta))^2 if D dot U >= 0 and cos(theta) >= 0
+    // (D dot U)^2 < |D|^2 (cos(theta))^2 if D dot U <  0 and cos(theta) <  0
+    // true                               if D dot U >= 0 and cos(theta) <  0
+    // false                              if D dot U <  0 and cos(theta) >= 0
+    const unsigned cSignMask = 0x80000000;
+    union {
+        float f;
+        unsigned u;
+        }a, b, lhs, rhs;
+    a.f = DdotU;
+    b.f = cosTheta;
+    unsigned asign = a.u & cSignMask;
+    unsigned bsign = b.u & cSignMask;
+    if (asign == bsign) {
+        lhs.f = DdotU * DdotU;
+        rhs.f = squaredLength * cosTheta * cosTheta;
+        lhs.u |= asign;
+        rhs.u |= asign;
+        return lhs.f > rhs.f;
+        }
+    else
+        return asign == 0;
+}
+
+void lifeObj::onExit(){
+    __NotificationCenter::getInstance()->removeAllObservers(this);
+}

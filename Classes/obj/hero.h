@@ -32,10 +32,14 @@ public:
     virtual Rect getShadowRect();
     
     virtual void die(){
-        lifeObj::die(-1);
+        lifeObj::die(NULL);
     };
     
     void actionAttack();
+    
+    void attackEffect(__Array* objList);
+    
+    //virtual Point getKeyPoint();
     
 private:
     CC_SYNTHESIZE(Point, destination, DesPoin);

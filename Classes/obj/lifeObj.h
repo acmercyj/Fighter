@@ -28,6 +28,11 @@ enum class EobjState{
     E_RUSH
 };
 
+class dataModel : public Ref
+{
+    dataModel(){};
+    ~dataModel(){};
+};
 
 const int _hardDir[2][4] = {1, 1, -1, -1, -1, 1, 1, -1};
 
@@ -66,7 +71,9 @@ protected:
 class lifeObj : public Sprite , public baseObj
 {
 public:
-    lifeObj() : objState(EobjState::E_STAND){}
+    lifeObj() : objState(EobjState::E_STAND){
+        __NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(lifeObj::die), "die", NULL);
+    }
     ~lifeObj() {
         CC_SAFE_RELEASE_NULL(rootObj);
     }
@@ -90,7 +97,7 @@ public:
     
     virtual void hurt(float deltaAngle = 15, float hp = 10);
     
-    virtual void die(int flag = 1);
+    virtual void die(Ref* data);
     
     Animation* createAnimateWithFileNames(const char* str, int amount);
     
@@ -98,11 +105,25 @@ public:
     
     Point getPointInMap(Point pos);
     
+    bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
+                                  float px, float py);
+    
     //virtual void setCollisionRectVisible(bool visible){}
     
+    virtual Point getKeyPoint() {
+        return map->convertToNodeSpace(keyPoint);
+    }
+    
 public:
-    void setActiveRange(Size range){
+    virtual void onExit();
+    
+public:
+    static void setActiveRange(Size range){
         lifeObj::activeRange = range;
+    }
+    
+    static void setMap(Sprite* spMap){
+        lifeObj::map = spMap;
     }
 protected:
     Edirection dir;
@@ -116,6 +137,10 @@ protected:
     
     static Size activeRange;
     //CC_SYNTHESIZE(int, dirIndex, DirIndex);
+    
+    static Sprite* map;
+    
+    CC_SYNTHESIZE(Point, keyPoint, KeyPoint);
 };
 
 #endif /* defined(__Card__lifeObj__) */

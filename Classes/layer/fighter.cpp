@@ -182,7 +182,9 @@ void LCBattleScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event){
     }else if ((int)keyCode == 's'){
         hero->die();
         ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
-        monster->die();
+        monster->die(NULL);
+    }else if((int)keyCode == 'n'){
+        __NotificationCenter::getInstance()->postNotification("die");
     }
 }
 
@@ -250,7 +252,7 @@ void LCBattleScene::sendPosition(Point pos){
 void LCBattleScene::createHero(){
     hero = ObjHero::create(backGround, getCenterPos());
     hero->retain();
-    hero->setActiveRange(backGround->getContentSize());
+    //hero->setActiveRange(backGround->getContentSize());
     hero->actionStand();
     
     hero->getrootObj()->setTag(ETagHero);
@@ -274,9 +276,13 @@ void LCBattleScene::initView()
     
     backGround->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
+    lifeObj::setActiveRange(backGround->getContentSize());
+    lifeObj::setMap(backGround);
+    
     createHero();
     
     addMonster(3);
+    
     
     schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     
@@ -321,7 +327,7 @@ void LCBattleScene::addMonsterAtPosition(Point p)
 {
     ObjMonster* monster = ObjMonster::create(backGround, p, monsterArr->count() + 1);//new ObjMonster();
     
-    monster->setActiveRange(backGround->getContentSize());
+    //monster->setActiveRange(backGround->getContentSize());
     monster->actionStand();
     monster->setID(monsterArr->count() + 1);
     monsterArr->addObject(monster);

@@ -34,7 +34,7 @@ LCBattleScene::~LCBattleScene()
 {
     CC_SAFE_RELEASE_NULL(hero);
     CC_SAFE_RELEASE_NULL(monsterArr);
-    CC_SAFE_DELETE(tree);
+//    CC_SAFE_DELETE(tree);
     _eventDispatcher->removeEventListener(_mouseListener);
     _eventDispatcher->removeEventListener(_keyboardListener);
 }
@@ -73,9 +73,13 @@ bool LCBattleScene::init()
     
     initView();
     
-    Rect rect = Rect(0, 0, backGround->getContentSize().width, backGround->getContentSize().height);
-    tree = new QuadTree(4, rect);
-    
+//    Rect rect = Rect(0, 0, backGround->getContentSize().width, backGround->getContentSize().height);
+//    tree = new QuadTree(4, rect);
+    for(int i = 0; i < monsterArr->count(); ++i){
+        lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
+        QuadTree::sharedQuadTree()->addObject(obj);
+    }
+    QuadTree::sharedQuadTree()->addObject(hero);
     
     return true;
 }
@@ -86,6 +90,7 @@ void LCBattleScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event){
 
 void LCBattleScene::update(float duration){
     // set z order start
+    __NotificationCenter::sharedNotificationCenter()->postNotification("move");
     for(int i = 0; i < monsterArr->count(); ++i){
         ObjMonster* monster_1 = (ObjMonster*)monsterArr->getObjectAtIndex(i);
         for(int j = i + 1; j < monsterArr->count(); ++j){
@@ -109,18 +114,17 @@ void LCBattleScene::update(float duration){
     }
     // set z order end
     
-    tree->clear();
-    for(int i = 0; i < monsterArr->count(); ++i){
-        lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
-        tree->addObject(obj);
-    }
-    tree->addObject(hero);
+//    tree->clear();
+//    for(int i = 0; i < monsterArr->count(); ++i){
+//        lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
+//        QuadTree::sharedQuadTree()->addObject(obj);
+//    }
+//    QuadTree::sharedQuadTree()->addObject(hero);
 
     __Array* arr = __Array::create();
-    
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
-        tree->getCollisionObjects(monster, arr);
+        QuadTree::sharedQuadTree()->getCollisionObjects(monster, arr);
         for(int j = 0; j < arr->count(); ++j){
             lifeObj* monster_1 = (lifeObj*)arr->getObjectAtIndex(j);
             
@@ -130,7 +134,7 @@ void LCBattleScene::update(float duration){
             Rect rec_1 = ((lifeObj*)monster_1)->getShadowRect();
             if(rec.intersectsRect(rec_1)){
                 ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
-                CCLOG("cllo");
+                CCLOG("cllo%f %f",rec.origin.x,rec.origin.y);
                 
                 monster->actionAttack();
                 monster_1->actionAttack();

@@ -38,7 +38,7 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     hero->setKeyPoint_l(Point(0, hero->rootObj->getContentSize().height / 2));
     
     hero->setKeyPoint_r(Point(hero->rootObj->getContentSize().width, hero->rootObj->getContentSize().height / 2));
-    
+    hero->setObjType(EObjType::E_HERO);
 #ifndef HIDE_COLLISION_RECT
     hero->shadow = Sprite::create();
     target->addChild(hero->shadow);
@@ -146,13 +146,13 @@ void ObjHero::attackEffect(){
     //map->convertToNodeSpace(Point(rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2));
     float CR = rootObj->getContentSize().width / 2;
     
-    Point up = Point(centerP.x + 1.0f, centerP.y);
+    Point up = Point(1.0f, 0);
     
     float cosTheta = 1.0f / sqrtf(2.0f);
     for(int i = 0; i < objList->count(); ++i){
         lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
         Point kp = obj->getKeyPoint(rootObj->getPosition());
-        if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, sqrtf(CR), cosTheta,
+        if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,
                                     kp.x, kp.y)){
             obj->hurt(getATK());
             CCLOG("hit!!");

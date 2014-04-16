@@ -28,6 +28,11 @@ enum class EobjState{
     E_RUSH
 };
 
+enum class EObjType{
+    E_HERO,
+    E_MONSTER
+};
+
 class dataModel : public Ref
 {
     dataModel(){};
@@ -135,7 +140,7 @@ protected:
     Edirection dir;
     
     CC_SYNTHESIZE(EobjState, objState, State);
-    
+    CC_SYNTHESIZE(EObjType, objType, ObjType);
     CC_SYNTHESIZE(Sprite*, shadow, Shadow);
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);

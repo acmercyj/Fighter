@@ -131,9 +131,10 @@ void LCBattleScene::update(float duration){
             if(rec.intersectsRect(rec_1)){
                 ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
                 //CCLOG("cllo");
-                
-                monster->actionAttack();
-                monster_1->actionAttack();
+                if(monster->getObjType() != monster_1->getObjType()){
+                    if(monster->getObjType() == EObjType::E_MONSTER) monster->actionAttack();
+                    if(monster_1->getObjType() == EObjType::E_MONSTER) monster_1->actionAttack();
+                }
             }
         }
     }

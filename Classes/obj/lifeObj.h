@@ -112,7 +112,7 @@ public:
     
     bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
                                   float px, float py);
-    
+    float getCosTheta(Point origin, Point p);
     //virtual void setCollisionRectVisible(bool visible){}
     
     virtual Point getKeyPoint(Point exP) {
@@ -125,6 +125,7 @@ public:
         return p;
     }
     
+    void removeRootObj();
 public:
     virtual void onExit();
     
@@ -153,6 +154,8 @@ protected:
     
     CC_SYNTHESIZE(Point, keyPoint_l, KeyPoint_l);
     CC_SYNTHESIZE(Point, keyPoint_r, KeyPoint_r)
+    
+    CC_SYNTHESIZE(Label*, debugLabel, DebugLabel);
 };
 
 #endif /* defined(__Card__lifeObj__) */

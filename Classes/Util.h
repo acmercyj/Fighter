@@ -26,6 +26,11 @@ public:
     
     Util* getInstance();
     void destroyInstance();
+    
+    static bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
+                                         float px, float py);
+    
+    static bool getCosTheta(Point origin, Point p);
 };
 
 enum E_tag

@@ -78,6 +78,8 @@ void lifeObj::moveAway(Rect rect){
 }
 
 void lifeObj::hurt(float deltaAngle, float hp){
+    
+    setState(EobjState::E_HURT);
     RotateTo* rotateBy_1 = RotateTo::create(0.2, deltaAngle);
     RotateTo* rotateBy_2 = RotateTo::create(0.2, 0);
     Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
@@ -95,6 +97,10 @@ void lifeObj::hurt(float deltaAngle, float hp){
     rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
 }
 
+void lifeObj::removeRootObj(){
+    rootObj->removeFromParentAndCleanup(true);
+}
+
 void lifeObj::die(Ref* data){
     int flag = 1;
     rootObj->stopAllActions();
@@ -107,7 +113,7 @@ void lifeObj::die(Ref* data){
     
     hpProgress->setPercentage(0);
     
-    rootObj->runAction(spawn);
+    rootObj->runAction(CCSequence::create(spawn, DelayTime::create(2.0f), CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
 }
 
 Point lifeObj::getPointInMap(Point pos){
@@ -191,6 +197,13 @@ bool lifeObj::IsPointInCircularSector3(float cx, float cy, float ux, float uy, f
     else
         return asign == 0;
 }
+
+float lifeObj::getCosTheta(Point origin, Point p){
+    
+    if(p.x > origin.x) return 1.0f / sqrtf(2.0f);
+    else return -1.0f / sqrtf(2.0f);
+}
+
 
 void lifeObj::onExit(){
     __NotificationCenter::getInstance()->removeAllObservers(this);

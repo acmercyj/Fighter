@@ -7,6 +7,7 @@
 //
 
 #include "hero.h"
+#include "Util.h"
 
 float ObjHero::speed = 230;
 
@@ -39,6 +40,10 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     
     hero->setKeyPoint_r(Point(hero->rootObj->getContentSize().width, hero->rootObj->getContentSize().height / 2));
     hero->setObjType(EObjType::E_HERO);
+    
+    hero->setDebugLabel(Label::create("0", "fzcy.ttf", 30));
+    target->addChild(hero->getDebugLabel(), 10);
+    
 #ifndef HIDE_COLLISION_RECT
     hero->shadow = Sprite::create();
     target->addChild(hero->shadow);
@@ -142,16 +147,21 @@ void ObjHero::attackEffect(){
     //__Array* objList = objList;
     if(objList == NULL || objList->count() <= 0) return;
     
-    Point centerP = Point(rootObj->getPositionX() + rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2);
+    Point centerP = Point(rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
     //map->convertToNodeSpace(Point(rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2));
-    float CR = rootObj->getContentSize().width / 2;
+    
+    getDebugLabel()->setPosition(centerP);
+    float CR = rootObj->getContentSize().width / 2 + 100;
     
     Point up = Point(1.0f, 0);
     
-    float cosTheta = 1.0f / sqrtf(2.0f);
+    //1.0f / sqrtf(2.0f);
     for(int i = 0; i < objList->count(); ++i){
         lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
         Point kp = obj->getKeyPoint(rootObj->getPosition());
+        float cosTheta = getCosTheta(centerP, kp);
+        obj->getDebugLabel()->setPosition(kp);
+        
         if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,
                                     kp.x, kp.y)){
             obj->hurt(getATK());

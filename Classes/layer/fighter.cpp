@@ -323,6 +323,7 @@ void LCBattleScene::addMonster(int amount){
 void LCBattleScene::followHero(float duration){
     for(int i = 0; i < monsterArr->count(); ++i){
         ObjMonster * monster = (ObjMonster*)monsterArr->getObjectAtIndex(i);
+        if(monster->getState() == EobjState::E_HURT) continue;
         monster->actionWalk(hero->getrootObj()->getPosition());
     }
 }

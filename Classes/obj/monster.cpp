@@ -30,7 +30,7 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->hpProgress->setType(ProgressTimer::Type::BAR);
     monster->hpProgress->setBarChangeRate(ccp(1, 0));
     monster->hpProgress->setMidpoint(Point(0, 0.5));
-    
+    //monster->hpProgress->setReverseDirection(true);
     monster->hpProgress->setPosition(Point(monster->getrootObj()->getContentSize().width / 2, monster->getrootObj()->getContentSize().height - 30));
     monster->hpProgress->setPercentage(100);
     monster->getrootObj()->addChild(monster->hpProgress);

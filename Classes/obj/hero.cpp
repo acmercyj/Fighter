@@ -158,6 +158,7 @@ void ObjHero::attackEffect(){
     //1.0f / sqrtf(2.0f);
     for(int i = 0; i < objList->count(); ++i){
         lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
+        if(obj->getState() == EobjState::E_HURT) continue;
         Point kp = obj->getKeyPoint(rootObj->getPosition());
         if(kp.x < centerP.x) up.x = -1;
         obj->getDebugLabel()->setPosition(kp);

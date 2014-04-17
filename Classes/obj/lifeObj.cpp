@@ -85,7 +85,6 @@ void lifeObj::hurt(float deltaAngle, float hp){
     Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
     //Repeat* repeat = Repeat::create(seq, 1);
     
-    
     float te = hpProgress->getPercentage();
     float totalHp = (1 + 1 - hpProgress->getPercentage() / 100) * this->hp;
     ProgressTo* progressTo = ProgressTo::create(0.2, (this->hp - hp) / totalHp * 100);
@@ -98,6 +97,7 @@ void lifeObj::hurt(float deltaAngle, float hp){
 }
 
 void lifeObj::removeRootObj(){
+    __NotificationCenter::getInstance()->postNotification("deleteMonster", this);
     rootObj->removeFromParentAndCleanup(true);
 }
 
@@ -113,7 +113,7 @@ void lifeObj::die(Ref* data){
     
     hpProgress->setPercentage(0);
     
-    rootObj->runAction(CCSequence::create(spawn, DelayTime::create(2.0f), CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
+    rootObj->runAction(CCSequence::create(spawn, DelayTime::create(2.0f), CallFunc::create( CC_CALLBACK_0(lifeObj::removeRootObj,this)), NULL));
 }
 
 Point lifeObj::getPointInMap(Point pos){
@@ -133,7 +133,6 @@ Point lifeObj::getPointInMap(Point pos){
 }
 
 Animation* lifeObj::createAnimateWithFileNames(const char* str, int amount){
-    
     Vector<SpriteFrame*> frames;
     for(auto i = 1; i <= amount; ++i){
         __String* fileName = String::createWithFormat(str, i);
@@ -197,13 +196,6 @@ bool lifeObj::IsPointInCircularSector3(float cx, float cy, float ux, float uy, f
     else
         return asign == 0;
 }
-
-float lifeObj::getCosTheta(Point origin, Point p){
-    
-    if(p.x > origin.x) return 1.0f / sqrtf(2.0f);
-    else return -1.0f / sqrtf(2.0f);
-}
-
 
 void lifeObj::onExit(){
     __NotificationCenter::getInstance()->removeAllObservers(this);

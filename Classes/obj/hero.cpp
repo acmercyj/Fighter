@@ -154,12 +154,12 @@ void ObjHero::attackEffect(){
     float CR = rootObj->getContentSize().width / 2 + 100;
     
     Point up = Point(1.0f, 0);
-    
+    float cosTheta = 1.0f / sqrtf(2.0f);
     //1.0f / sqrtf(2.0f);
     for(int i = 0; i < objList->count(); ++i){
         lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
         Point kp = obj->getKeyPoint(rootObj->getPosition());
-        float cosTheta = getCosTheta(centerP, kp);
+        if(kp.x < centerP.x) up.x = -1;
         obj->getDebugLabel()->setPosition(kp);
         
         if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,

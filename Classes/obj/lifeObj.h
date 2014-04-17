@@ -112,8 +112,6 @@ public:
     
     bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
                                   float px, float py);
-    float getCosTheta(Point origin, Point p);
-    //virtual void setCollisionRectVisible(bool visible){}
     
     virtual Point getKeyPoint(Point exP) {
         

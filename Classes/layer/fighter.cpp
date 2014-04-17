@@ -112,6 +112,7 @@ void LCBattleScene::update(float duration){
     tree->clear();
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
+        if(obj->getState() == EobjState::E_HURT) continue;
         tree->addObject(obj);
     }
     tree->addObject(hero);
@@ -282,11 +283,19 @@ void LCBattleScene::initView()
     
     hero->objList = monsterArr;
     
+    __NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(LCBattleScene::delteMonster), "delteMonster", NULL);
+    
     schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     
     scheduleOnce(schedule_selector(LCBattleScene::test), 1);
     scheduleUpdate();
  //   schedule(, 2, 2);
+}
+
+void LCBattleScene::delteMonster(Ref* obj){
+    if(monsterArr->containsObject(obj)){
+        monsterArr->removeObject(obj);
+    }
 }
 
 Point LCBattleScene::getPointInMap(Point pos){

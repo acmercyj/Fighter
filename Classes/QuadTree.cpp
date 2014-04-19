@@ -9,17 +9,32 @@
 #include "QuadTree.h"
 #include "lifeObj.h"
 
+#define MOVE "move"
+#define NOTIFY __NotificationCenter::sharedNotificationCenter()
+
+QuadTree *QuadTree::m_Instance = NULL;
+
+QuadTree *QuadTree::sharedQuadTree() {
+    if (!m_Instance) {
+        Size size = Director::sharedDirector()->getWinSize();
+        m_Instance = new QuadTree(3,Rect(0, 0, size.width, size.height));
+    }
+    return m_Instance;
+}
+
 //build the tree
 QuadTree::QuadTree(int deep, Rect rect) {
     mRect = rect;
     mObjArray = CCArray::create();
     mObjArray->retain();
+    NOTIFY->addObserver(this, callfuncO_selector(QuadTree::onObjectMoved), MOVE, NULL);
     initChild(deep, rect);
 }
 
 QuadTree::~QuadTree() {
     mObjArray->removeAllObjects();
     mObjArray->release();
+    NOTIFY->removeObserver(this, MOVE);
     deleteTree();
 }
 
@@ -91,7 +106,6 @@ bool QuadTree::isRecAContainsRecB(Rect recA, Rect recB) {
 void QuadTree::getCollisionObjects(Node *node, __Array *result) {
     lifeObj* obj = (lifeObj*)node;
     Rect rec = obj->getShadowRect();
-    //CCRect rec = node->boundingBox();
     if (isRecAContainsRecB(mRect, rec)) {
         result->addObjectsFromArray(mObjArray);
         for (int i = 0; i < BRANCH; i++) {
@@ -101,4 +115,25 @@ void QuadTree::getCollisionObjects(Node *node, __Array *result) {
             mChild[i]->getCollisionObjects(node, result);
         }
     }
+}
+
+void QuadTree::onObjectMoved(Object *obj) {
+    int count = mObjArray->count();
+    if (count <= 0) {
+        return;
+    }
+    __Array *objectRemove = __Array::create();
+    for (int i = 0; i < count; i++) {
+        Node *node = dynamic_cast<Node*>(mObjArray->objectAtIndex(i));
+        lifeObj *life = (lifeObj*)node;
+        if (!isRecAContainsRecB(mRect, life->getShadowRect())) {
+            QuadTree::sharedQuadTree()->addObject(node);
+            objectRemove->addObject(node);
+        }
+    }
+    count = objectRemove->count();
+    for (int j = 0; j < count; j++) {
+        mObjArray->removeObject(objectRemove->objectAtIndex(j));
+    }
+    objectRemove->removeAllObjects();
 }

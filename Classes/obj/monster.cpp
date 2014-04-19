@@ -35,10 +35,15 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
     monster->hpProgress->setPercentage(100);
     monster->getrootObj()->addChild(monster->hpProgress);
     
-    monster->setKeyPoint(Point(0, monster->rootObj->getContentSize().height / 2));
-    //Label* l = Label::create(String::createWithFormat("%d", id)->getCString(), "fzcy.ttf", 30);
-    //l->setString(String::createWithFormat("%d", id)->getCString());
-    //l->setPosition(Point(0, 200));
+    monster->setKeyPoint_l(Point(0, 60));
+    monster->setKeyPoint_r(Point(monster->rootObj->getContentSize().width, 60));
+    
+    monster->setObjType(EObjType::E_MONSTER);
+    
+    monster->setDebugLabel(Label::create("0", "fzcy.ttf", 30));
+    target->addChild(monster->getDebugLabel(), 10);
+    //debugLabel->setString(String::createWithFormat("%d", id)->getCString());
+    //debugLabel->setPosition(Point(0, 200));
     //monster->getrootObj()->addChild(l);
 #ifndef HIDE_COLLISION_RECT
     monster->shadow = Sprite::create();
@@ -49,6 +54,12 @@ ObjMonster* ObjMonster::create(Node* target, Point pos, int id){
 
 void ObjMonster::actionStand(){
     assert(rootObj);
+    
+    if(getHP() <= 0){
+        die(NULL);
+        return;
+    }
+    //if(getState() == EobjState::E_HURT) return;
     rootObj->stopAllActions();
     setState(EobjState::E_STAND);
     Animation* stand = createAnimateWithFileNames("Robot%d.png", 3);
@@ -57,6 +68,7 @@ void ObjMonster::actionStand(){
 }
 
 void ObjMonster::turnAround(){
+    if(getState() == EobjState::E_HURT) return;
     if(dir == EDIR_FORWARD){
         rootObj->setScaleX(1);
         dir = EDIR_BACKWARD;
@@ -78,7 +90,7 @@ Rect ObjMonster::getShadowRect(){
 }
 
 void ObjMonster::actionWalk(Point des){
-    
+    if(getState() == EobjState::E_HURT) return;
     Point destination = getPointInMap(des);
     
     assert(rootObj);
@@ -103,6 +115,7 @@ void ObjMonster::actionWalk(Point des){
 }
 
 void ObjMonster::actionAttack(){
+    if(getState() == EobjState::E_HURT) return;
     if(getState() == EobjState::E_ATTACK) return;
     assert(rootObj);
     rootObj->stopAllActions();

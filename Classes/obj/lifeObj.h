@@ -28,6 +28,11 @@ enum class EobjState{
     E_RUSH
 };
 
+enum class EObjType{
+    E_HERO,
+    E_MONSTER
+};
+
 class dataModel : public Ref
 {
     dataModel(){};
@@ -108,12 +113,17 @@ public:
     bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
                                   float px, float py);
     
-    //virtual void setCollisionRectVisible(bool visible){}
-    
-    virtual Point getKeyPoint() {
-        return map->convertToNodeSpace(keyPoint);
+    virtual Point getKeyPoint(Point exP) {
+        
+        Point lp = Point(keyPoint_l.x + rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+        //map->convertToNodeSpace(keyPoint_l);
+        Point rp = Point(keyPoint_l.x + rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+        //map->convertToNodeSpace(keyPoint_r);
+        Point p = exP.x > rp.x ? rp : lp;
+        return p;
     }
     
+    void removeRootObj();
 public:
     virtual void onExit();
     
@@ -129,7 +139,7 @@ protected:
     Edirection dir;
     
     CC_SYNTHESIZE(EobjState, objState, State);
-    
+    CC_SYNTHESIZE(EObjType, objType, ObjType);
     CC_SYNTHESIZE(Sprite*, shadow, Shadow);
     CC_SYNTHESIZE(Sprite*, rootObj, rootObj);
     CC_SYNTHESIZE(ProgressTimer*, hpProgress, hpBar);
@@ -140,7 +150,10 @@ protected:
     
     static Sprite* map;
     
-    CC_SYNTHESIZE(Point, keyPoint, KeyPoint);
+    CC_SYNTHESIZE(Point, keyPoint_l, KeyPoint_l);
+    CC_SYNTHESIZE(Point, keyPoint_r, KeyPoint_r)
+    
+    CC_SYNTHESIZE(Label*, debugLabel, DebugLabel);
 };
 
 #endif /* defined(__Card__lifeObj__) */

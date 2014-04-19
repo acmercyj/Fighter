@@ -78,11 +78,12 @@ void lifeObj::moveAway(Rect rect){
 }
 
 void lifeObj::hurt(float deltaAngle, float hp){
+    
+    setState(EobjState::E_HURT);
     RotateTo* rotateBy_1 = RotateTo::create(0.2, deltaAngle);
     RotateTo* rotateBy_2 = RotateTo::create(0.2, 0);
     Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
     //Repeat* repeat = Repeat::create(seq, 1);
-    
     
     float te = hpProgress->getPercentage();
     float totalHp = (1 + 1 - hpProgress->getPercentage() / 100) * this->hp;
@@ -93,6 +94,11 @@ void lifeObj::hurt(float deltaAngle, float hp){
     
     rootObj->stopAllActions();
     rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
+}
+
+void lifeObj::removeRootObj(){
+    __NotificationCenter::getInstance()->postNotification("deleteMonster", this);
+    rootObj->removeFromParentAndCleanup(true);
 }
 
 void lifeObj::die(Ref* data){
@@ -107,7 +113,7 @@ void lifeObj::die(Ref* data){
     
     hpProgress->setPercentage(0);
     
-    rootObj->runAction(spawn);
+    rootObj->runAction(CCSequence::create(spawn, DelayTime::create(2.0f), CallFunc::create( CC_CALLBACK_0(lifeObj::removeRootObj,this)), NULL));
 }
 
 Point lifeObj::getPointInMap(Point pos){
@@ -127,7 +133,6 @@ Point lifeObj::getPointInMap(Point pos){
 }
 
 Animation* lifeObj::createAnimateWithFileNames(const char* str, int amount){
-    
     Vector<SpriteFrame*> frames;
     for(auto i = 1; i <= amount; ++i){
         __String* fileName = String::createWithFormat(str, i);

@@ -65,6 +65,8 @@ private:
     
     __Array* monsterArr;
     
+    void delteMonster(Ref* obj);
+    
 private:
 	Sprite * backGround;
     //Sprite * activeRange;

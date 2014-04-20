@@ -25,6 +25,7 @@ enum class EobjState{
     E_ATTACK,
     E_WALK,
     E_HURT,
+    E_DEAD,
     E_RUSH
 };
 

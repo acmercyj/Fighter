@@ -10,13 +10,13 @@
 #include "lifeObj.h"
 
 #define QUADTREE_MOVE "QUADTREE_MOVE"
-#define NOTIFY __NotificationCenter::sharedNotificationCenter()
+#define NOTIFY __NotificationCenter::getInstance()
 
 QuadTree *QuadTree::m_Instance = NULL;
 
 QuadTree *QuadTree::getInstance() {
     if (!m_Instance) {
-        Size size = Director::sharedDirector()->getWinSize();
+        Size size = Director::getInstance()->getWinSize();
         m_Instance = new QuadTree(3,Rect(0, 0, size.width, size.height));
     }
     return m_Instance;
@@ -29,6 +29,8 @@ QuadTree::QuadTree(int deep, Rect rect) {
     mObjArray->retain();
     NOTIFY->addObserver(this, callfuncO_selector(QuadTree::onObjectMoved), QUADTREE_MOVE, NULL);
     initChild(deep, rect);
+    
+    NOTIFY->addObserver(this, callfuncO_selector(QuadTree::onObjectRemove), "deleteObj", NULL);
 }
 
 QuadTree::~QuadTree() {
@@ -136,4 +138,14 @@ void QuadTree::onObjectMoved(Ref *obj) {
         mObjArray->removeObject(objectRemove->getObjectAtIndex(j));
     }
     objectRemove->removeAllObjects();
+}
+
+void QuadTree::onObjectRemove(Ref* obj){
+    if(!mObjArray) return;
+    if(mObjArray->containsObject(obj)){
+        mObjArray->removeObject(obj);
+    }
+    for (int i = 0; i < BRANCH; i++) {
+        if(mChild[i]) mChild[i]->onObjectRemove(obj);
+    }
 }

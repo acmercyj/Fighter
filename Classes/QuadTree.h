@@ -23,7 +23,7 @@ class QuadTree : public Ref{
 public:
     QuadTree(int deep,Rect rect);
     ~QuadTree();
-    bool addObject(Node *node);//build tree
+    bool addObject(Node *node);
     void clear();
     void getCollisionObjects(Node *node, __Array *result);
     static QuadTree *getInstance();
@@ -32,7 +32,9 @@ public:
     void deleteTree();
     void clearTree(QuadTree *tree);
     bool isRecAContainsRecB(Rect recA, Rect recB);
-    void onObjectMoved(Ref *obj);
+    void onObjectMoved(Ref* obj);
+    
+    void onObjectRemove(Ref* obj);
     
     static QuadTree *m_Instance;
     __Array *mObjArray;

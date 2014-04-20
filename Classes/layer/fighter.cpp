@@ -275,11 +275,11 @@ void LCBattleScene::initView()
     
     createHero();
     
-    addMonster(30);
+    addMonster(3);
     
     //hero->objList = monsterArr;
     
-    __NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(LCBattleScene::delteMonster), "delteMonster", NULL);
+    __NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(LCBattleScene::delteMonster), "deleteObj", NULL);
     
     schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     
@@ -293,6 +293,9 @@ void LCBattleScene::initView()
 void LCBattleScene::delteMonster(Ref* obj){
     if(monsterArr->containsObject(obj)){
         monsterArr->removeObject(obj);
+    }else{
+        ObjHero* oh = dynamic_cast<ObjHero*>(obj);
+        //if(oh && oh->getState() == EobjState::E_RUSH)
     }
 }
 
@@ -321,7 +324,7 @@ void LCBattleScene::addMonster(int amount){
 void LCBattleScene::followHero(float duration){
     for(int i = 0; i < monsterArr->count(); ++i){
         ObjMonster * monster = (ObjMonster*)monsterArr->getObjectAtIndex(i);
-        if(monster->getState() == EobjState::E_HURT) continue;
+        if(monster->getState() == EobjState::E_DEAD) continue;
         monster->actionWalk(hero->getrootObj()->getPosition());
     }
 }

@@ -130,6 +130,8 @@ void ObjHero::actionRusn(){
     MoveTo* moveTo = MoveTo::create(0.3, getPointInMap(p));
     
     rootObj->runAction(CCSequence::create(moveTo, CallFunc::create( CC_CALLBACK_0(ObjHero::actionStand,this)), NULL));
+    
+    attackEffect();
 }
 
 void ObjHero::actionAttack(){

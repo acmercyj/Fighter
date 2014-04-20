@@ -58,6 +58,8 @@ public:
     
     void sendPosition(Point pos);
     
+    void caculateCollitionPerSec(float dur);
+    
 private:
     void addMonster(int amount = 1);
     

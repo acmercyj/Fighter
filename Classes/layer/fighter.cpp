@@ -107,6 +107,16 @@ void LCBattleScene::update(float duration){
     }
     // set z order end
     __NotificationCenter::getInstance()->postNotification("QUADTREE_MOVE");
+    
+    for(int i = 0; i < monsterArr->count(); ++i){
+        lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
+        if(hero->getShadowRect().intersectsRect(monster->getShadowRect())){
+            monster->actionAttack();
+        }
+    }
+}
+
+void LCBattleScene::caculateCollitionPerSec(float dur){
     __Array* arr = __Array::create();
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
@@ -120,10 +130,6 @@ void LCBattleScene::update(float duration){
             Rect rec_1 = ((lifeObj*)monster_1)->getShadowRect();
             if(rec.intersectsRect(rec_1)){
                 ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
-                if(monster->getObjType() != monster_1->getObjType()){
-                    if(monster->getObjType() == EObjType::E_MONSTER) monster->actionAttack();
-                    if(monster_1->getObjType() == EObjType::E_MONSTER) monster_1->actionAttack();
-                }
             }
         }
     }
@@ -159,11 +165,11 @@ void LCBattleScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event){
     CCLOG("%c", keyCode);
     if((int)keyCode == 32){
         
-        //hero->actionRusn();
+        hero->actionRusn();
         
-        hero->hurt();
-        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
-        monster->hurt();
+//        hero->hurt();
+//        ObjMonster* monster = (ObjMonster*)monsterArr->getObjectAtIndex(0);
+//        monster->hurt();
 
     }else if ((int)keyCode == 's'){
         hero->die();
@@ -269,7 +275,7 @@ void LCBattleScene::initView()
     
     createHero();
     
-    addMonster(3);
+    addMonster(30);
     
     //hero->objList = monsterArr;
     
@@ -278,6 +284,8 @@ void LCBattleScene::initView()
     schedule(schedule_selector(LCBattleScene::followHero), 3.0f, -1, 1);
     
     scheduleOnce(schedule_selector(LCBattleScene::test), 1);
+    
+    schedule(schedule_selector(LCBattleScene::caculateCollitionPerSec), 1.0f, -1, 1);
     scheduleUpdate();
  //   schedule(, 2, 2);
 }

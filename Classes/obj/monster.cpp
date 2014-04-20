@@ -90,7 +90,7 @@ Rect ObjMonster::getShadowRect(){
 }
 
 void ObjMonster::actionWalk(Point des){
-    if(getState() == EobjState::E_HURT) return;
+    //if(getState() == EobjState::E_HURT) return;
     Point destination = getPointInMap(des);
     
     assert(rootObj);

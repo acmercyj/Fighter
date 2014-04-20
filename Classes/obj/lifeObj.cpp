@@ -80,13 +80,13 @@ void lifeObj::moveAway(Rect rect){
 
 void lifeObj::hurt(float deltaAngle, float hp){
     
-    setState(EobjState::E_HURT);
-    RotateTo* rotateBy_1 = RotateTo::create(0.2, deltaAngle);
-    RotateTo* rotateBy_2 = RotateTo::create(0.2, 0);
-    Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
+    //setState(EobjState::E_HURT);
+    //RotateTo* rotateBy_1 = RotateTo::create(0.2, deltaAngle);
+    //RotateTo* rotateBy_2 = RotateTo::create(0.2, 0);
+    //Sequence* seq = Sequence::create(rotateBy_1, rotateBy_2, NULL);
     //Repeat* repeat = Repeat::create(seq, 1);
     
-    float te = hpProgress->getPercentage();
+    //float te = hpProgress->getPercentage();
     float totalHp = (1 + 1 - hpProgress->getPercentage() / 100) * this->hp;
     //ProgressTo* progressTo = ProgressTo::create(0.2, (this->hp - hp) / totalHp * 100);
     this->hp -= hp;
@@ -94,8 +94,12 @@ void lifeObj::hurt(float deltaAngle, float hp){
     
     hpProgress->setPercentage((this->hp - hp) / totalHp * 100);
     
-    rootObj->stopAllActions();
-    rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
+    if(getHP() <= 0){
+        die(NULL);
+        return;
+    }
+    //rootObj->stopAllActions();
+    //rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
 }
 
 void lifeObj::removeRootObj(){

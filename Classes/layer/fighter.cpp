@@ -106,12 +106,8 @@ void LCBattleScene::update(float duration){
         }
     }
     // set z order end
-    
-    
     __NotificationCenter::getInstance()->postNotification("QUADTREE_MOVE");
-    
     __Array* arr = __Array::create();
-    
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
         QuadTree::getInstance()->getCollisionObjects(monster, arr);
@@ -124,7 +120,6 @@ void LCBattleScene::update(float duration){
             Rect rec_1 = ((lifeObj*)monster_1)->getShadowRect();
             if(rec.intersectsRect(rec_1)){
                 ((lifeObj*)monster_1)->moveAway(monster->getShadowRect());//(ccp(flag * 20, flag * 20));
-                //CCLOG("cllo");
                 if(monster->getObjType() != monster_1->getObjType()){
                     if(monster->getObjType() == EObjType::E_MONSTER) monster->actionAttack();
                     if(monster_1->getObjType() == EObjType::E_MONSTER) monster_1->actionAttack();
@@ -276,7 +271,7 @@ void LCBattleScene::initView()
     
     addMonster(3);
     
-    hero->objList = monsterArr;
+    //hero->objList = monsterArr;
     
     __NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(LCBattleScene::delteMonster), "delteMonster", NULL);
     

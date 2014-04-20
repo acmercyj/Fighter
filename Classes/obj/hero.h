@@ -37,11 +37,11 @@ public:
     
     void actionAttack();
     
-    void attackEffect();//__Array* objList
+    //void attackEffect();
     
     //virtual Point getKeyPoint();
     //CC_SYNTHESIZE(<#varType#>, <#varName#>, <#funName#>)
-    __Array* objList;
+    //__Array* objList;
 private:
     CC_SYNTHESIZE(Point, destination, DesPoin);
 };

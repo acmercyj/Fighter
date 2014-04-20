@@ -7,6 +7,7 @@
 //
 
 #include "lifeObj.h"
+#include "QuadTree.h"
 Size lifeObj::activeRange = Size(0, 0);
 
 Sprite* lifeObj::map = NULL;
@@ -87,10 +88,11 @@ void lifeObj::hurt(float deltaAngle, float hp){
     
     float te = hpProgress->getPercentage();
     float totalHp = (1 + 1 - hpProgress->getPercentage() / 100) * this->hp;
-    ProgressTo* progressTo = ProgressTo::create(0.2, (this->hp - hp) / totalHp * 100);
+    //ProgressTo* progressTo = ProgressTo::create(0.2, (this->hp - hp) / totalHp * 100);
     this->hp -= hp;
-    hpProgress->runAction(progressTo);
+    //hpProgress->runAction(progressTo);
     
+    hpProgress->setPercentage((this->hp - hp) / totalHp * 100);
     
     rootObj->stopAllActions();
     rootObj->runAction(CCSequence::create(seq, CallFunc::create( CC_CALLBACK_0(lifeObj::actionStand,this)), NULL));
@@ -197,6 +199,34 @@ bool lifeObj::IsPointInCircularSector3(float cx, float cy, float ux, float uy, f
         return asign == 0;
 }
 
-void lifeObj::onExit(){
-    __NotificationCenter::getInstance()->removeAllObservers(this);
+//void lifeObj::onExit(){
+//    __NotificationCenter::getInstance()->removeAllObservers(this);
+//}
+
+void lifeObj::attackEffect(){
+    Point centerP = Point(rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+    getDebugLabel()->setPosition(centerP);
+    float CR = rootObj->getContentSize().width / 2 + 100;
+    Point up = Point(1.0f, 0);
+    float cosTheta = 1.0f / sqrtf(2.0f);
+    
+    __Array* objList = __Array::create();
+    QuadTree::getInstance()->getCollisionObjects(this, objList);
+    for(int i = 0; i < objList->count(); ++i){
+        lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
+        if(obj->getObjType() == getObjType() || obj->getState() == EobjState::E_HURT) continue;
+        Point kp = obj->getKeyPoint(rootObj->getPosition());
+        if(kp.x < centerP.x) up.x = -1;
+        obj->getDebugLabel()->setPosition(kp);
+        
+        Rect rec = obj->getShadowRect();
+        Rect rec_1 = getShadowRect();
+            
+        if(rec.intersectsRect(rec_1) || IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,
+                                    kp.x, kp.y)){
+            obj->hurt(getATK());
+            CCLOG("hit!!");
+        }
+    }
 }
+

@@ -8,6 +8,7 @@
 
 #include "hero.h"
 #include "Util.h"
+#include "QuadTree.h"
 
 float ObjHero::speed = 230;
 
@@ -23,7 +24,7 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     target->addChild(hero->rootObj);
     hero->rootObj->setPosition(pos);
     
-    hero->setHP(1000);
+    hero->setHP(300);
     hero->autorelease();
     
     
@@ -55,7 +56,6 @@ ObjHero* ObjHero::create(Node* target, Point pos){
     
     
     return hero;
-    //actionStand();
 }
 
 Rect ObjHero::getShadowRect(){
@@ -71,6 +71,10 @@ Rect ObjHero::getShadowRect(){
 
 void ObjHero::actionStand(){
     assert(rootObj);
+    if(getHP() <= 0){
+        die();
+        return;
+    }
     rootObj->stopAllActions();
     setDesPoin(rootObj->getPosition());
     setState(EobjState::E_STAND);
@@ -143,30 +147,33 @@ void ObjHero::actionAttack(){
     attackEffect();
 }
 
-void ObjHero::attackEffect(){
-    //__Array* objList = objList;
-    if(objList == NULL || objList->count() <= 0) return;
-    
-    Point centerP = Point(rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
-    //map->convertToNodeSpace(Point(rootObj->getContentSize().width / 2, rootObj->getContentSize().height / 2));
-    
-    getDebugLabel()->setPosition(centerP);
-    float CR = rootObj->getContentSize().width / 2 + 100;
-    
-    Point up = Point(1.0f, 0);
-    float cosTheta = 1.0f / sqrtf(2.0f);
-    //1.0f / sqrtf(2.0f);
-    for(int i = 0; i < objList->count(); ++i){
-        lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
-        if(obj->getState() == EobjState::E_HURT) continue;
-        Point kp = obj->getKeyPoint(rootObj->getPosition());
-        if(kp.x < centerP.x) up.x = -1;
-        obj->getDebugLabel()->setPosition(kp);
-        
-        if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,
-                                    kp.x, kp.y)){
-            obj->hurt(getATK());
-            CCLOG("hit!!");
-        }
-    }
-}
+//void ObjHero::attackEffect(){
+//    //__Array* objList = objList;
+//    //if(objList == NULL || objList->count() <= 0) return;
+//    
+//    Point centerP = Point(rootObj->getPositionX(), rootObj->getPositionY() + rootObj->getContentSize().height / 2);
+//    
+//    getDebugLabel()->setPosition(centerP);
+//    float CR = rootObj->getContentSize().width / 2 + 100;
+//    Point up = Point(1.0f, 0);
+//    float cosTheta = 1.0f / sqrtf(2.0f);
+//    
+//    __Array* objList = __Array::create();
+//    //lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
+//    QuadTree::getInstance()->getCollisionObjects(this, objList);
+//    //for(int j = 0; j < arr->count(); ++j){
+//            
+//    for(int i = 0; i < objList->count(); ++i){
+//        lifeObj* obj = dynamic_cast<lifeObj*>(objList->getObjectAtIndex(i));
+//        if(obj->getState() == EobjState::E_HURT) continue;
+//        Point kp = obj->getKeyPoint(rootObj->getPosition());
+//        if(kp.x < centerP.x) up.x = -1;
+//        obj->getDebugLabel()->setPosition(kp);
+//        
+//        if(IsPointInCircularSector3(centerP.x, centerP.y, up.x, up.y, CR * CR, cosTheta,
+//                                    kp.x, kp.y)){
+//            obj->hurt(getATK());
+//            CCLOG("hit!!");
+//        }
+//    }
+//}

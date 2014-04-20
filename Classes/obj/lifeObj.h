@@ -124,8 +124,10 @@ public:
     }
     
     void removeRootObj();
+    
+    void attackEffect();
 public:
-    virtual void onExit();
+    //virtual void onExit();
     
 public:
     static void setActiveRange(Size range){

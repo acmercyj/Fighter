@@ -125,4 +125,6 @@ void ObjMonster::actionAttack(){
     auto action = Animate::create(attack);
     
     rootObj->runAction(CCSequence::create(action, CallFunc::create( CC_CALLBACK_0(ObjMonster::actionStand,this)), NULL));
+    
+    attackEffect();
 }

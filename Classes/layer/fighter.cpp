@@ -34,7 +34,6 @@ LCBattleScene::~LCBattleScene()
 {
     CC_SAFE_RELEASE_NULL(hero);
     CC_SAFE_RELEASE_NULL(monsterArr);
-    CC_SAFE_DELETE(tree);
     _eventDispatcher->removeEventListener(_mouseListener);
     _eventDispatcher->removeEventListener(_keyboardListener);
 }
@@ -73,8 +72,7 @@ bool LCBattleScene::init()
     
     initView();
     
-    Rect rect = Rect(0, 0, backGround->getContentSize().width, backGround->getContentSize().height);
-    tree = new QuadTree(4, rect);
+    //Rect rect = Rect(0, 0, backGround->getContentSize().width, backGround->getContentSize().height);
     
     
     return true;
@@ -109,19 +107,14 @@ void LCBattleScene::update(float duration){
     }
     // set z order end
     
-    tree->clear();
-    for(int i = 0; i < monsterArr->count(); ++i){
-        lifeObj* obj = (lifeObj*)monsterArr->getObjectAtIndex(i);
-        if(obj->getState() == EobjState::E_HURT) continue;
-        tree->addObject(obj);
-    }
-    tree->addObject(hero);
-
+    
+    __NotificationCenter::getInstance()->postNotification("QUADTREE_MOVE");
+    
     __Array* arr = __Array::create();
     
     for(int i = 0; i < monsterArr->count(); ++i){
         lifeObj* monster = (lifeObj*)monsterArr->getObjectAtIndex(i);
-        tree->getCollisionObjects(monster, arr);
+        QuadTree::getInstance()->getCollisionObjects(monster, arr);
         for(int j = 0; j < arr->count(); ++j){
             lifeObj* monster_1 = (lifeObj*)arr->getObjectAtIndex(j);
             
@@ -254,6 +247,8 @@ void LCBattleScene::createHero(){
     hero->actionStand();
     
     hero->getrootObj()->setTag(ETagHero);
+    
+    QuadTree::getInstance()->addObject(hero);
 }
 
 Point LCBattleScene::getCenterPos(){
@@ -341,4 +336,6 @@ void LCBattleScene::addMonsterAtPosition(Point p)
     monsterArr->addObject(monster);
     
     monster->getrootObj()->setTag(ETagMonster);
+    
+    QuadTree::getInstance()->addObject(monster);
 }

@@ -9,12 +9,12 @@
 #include "QuadTree.h"
 #include "lifeObj.h"
 
-#define MOVE "move"
+#define QUADTREE_MOVE "QUADTREE_MOVE"
 #define NOTIFY __NotificationCenter::sharedNotificationCenter()
 
 QuadTree *QuadTree::m_Instance = NULL;
 
-QuadTree *QuadTree::sharedQuadTree() {
+QuadTree *QuadTree::getInstance() {
     if (!m_Instance) {
         Size size = Director::sharedDirector()->getWinSize();
         m_Instance = new QuadTree(3,Rect(0, 0, size.width, size.height));
@@ -27,14 +27,14 @@ QuadTree::QuadTree(int deep, Rect rect) {
     mRect = rect;
     mObjArray = CCArray::create();
     mObjArray->retain();
-    NOTIFY->addObserver(this, callfuncO_selector(QuadTree::onObjectMoved), MOVE, NULL);
+    NOTIFY->addObserver(this, callfuncO_selector(QuadTree::onObjectMoved), QUADTREE_MOVE, NULL);
     initChild(deep, rect);
 }
 
 QuadTree::~QuadTree() {
     mObjArray->removeAllObjects();
     mObjArray->release();
-    NOTIFY->removeObserver(this, MOVE);
+    NOTIFY->removeObserver(this, QUADTREE_MOVE);
     deleteTree();
 }
 
@@ -117,23 +117,23 @@ void QuadTree::getCollisionObjects(Node *node, __Array *result) {
     }
 }
 
-void QuadTree::onObjectMoved(Object *obj) {
+void QuadTree::onObjectMoved(Ref *obj) {
     int count = mObjArray->count();
     if (count <= 0) {
         return;
     }
     __Array *objectRemove = __Array::create();
     for (int i = 0; i < count; i++) {
-        Node *node = dynamic_cast<Node*>(mObjArray->objectAtIndex(i));
+        Node *node = dynamic_cast<Node*>(mObjArray->getObjectAtIndex(i));
         lifeObj *life = (lifeObj*)node;
         if (!isRecAContainsRecB(mRect, life->getShadowRect())) {
-            QuadTree::sharedQuadTree()->addObject(node);
+            QuadTree::getInstance()->addObject(node);
             objectRemove->addObject(node);
         }
     }
     count = objectRemove->count();
     for (int j = 0; j < count; j++) {
-        mObjArray->removeObject(objectRemove->objectAtIndex(j));
+        mObjArray->removeObject(objectRemove->getObjectAtIndex(j));
     }
     objectRemove->removeAllObjects();
 }

@@ -19,20 +19,20 @@ USING_NS_CC;
 //using namespace GLEE;
 
 
-class QuadTree : public Object{
+class QuadTree : public Ref{
 public:
     QuadTree(int deep,Rect rect);
     ~QuadTree();
     bool addObject(Node *node);//build tree
     void clear();
     void getCollisionObjects(Node *node, __Array *result);
-    static QuadTree *sharedQuadTree();
+    static QuadTree *getInstance();
     private:
     void initChild(int deep, Rect rect);
     void deleteTree();
     void clearTree(QuadTree *tree);
     bool isRecAContainsRecB(Rect recA, Rect recB);
-    void onObjectMoved(Object *obj);
+    void onObjectMoved(Ref *obj);
     
     static QuadTree *m_Instance;
     __Array *mObjArray;

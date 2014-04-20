@@ -82,9 +82,6 @@ public:
     ObjHero* hero;
 private:
     CREATE_FUNC(LCBattleScene);
-    
-private:
-    QuadTree* tree;
 };
 
 #endif /* defined(__Card__fighter__) */

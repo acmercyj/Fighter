@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "fighter.h"
 #include "HelloWorldScene.h"
+#include "GameOver.h"
 
 USING_NS_CC;
 
@@ -32,7 +33,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     auto scene = LCBattleScene::createScene();
-    //auto scene = HelloWorld::createScene();
+    //auto scene = LGameOver::createScene();
     
     // run
     director->runWithScene(scene);

@@ -7,6 +7,7 @@
 //
 
 #include "fighter.h"
+#include "GameOver.h"
 #include "Util.h"
 
 LCBattleScene::LCBattleScene():
@@ -294,7 +295,12 @@ void LCBattleScene::delteMonster(Ref* obj){
     if(monsterArr->containsObject(obj)){
         monsterArr->removeObject(obj);
     }else{
-        ObjHero* oh = dynamic_cast<ObjHero*>(obj);
+        //ObjHero* oh = dynamic_cast<ObjHero*>(obj);
+        
+        auto scene = LGameOver::createScene();
+        
+        
+        Director::getInstance()->pushScene(scene);
         //if(oh && oh->getState() == EobjState::E_RUSH)
     }
 }

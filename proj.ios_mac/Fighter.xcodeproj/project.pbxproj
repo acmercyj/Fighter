@@ -158,6 +158,8 @@
 		2562BBFC18EFFA2200C5AEA9 /* fzcy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2562BBF918EFFA2200C5AEA9 /* fzcy.ttf */; };
 		2562BBFD18EFFA2200C5AEA9 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2562BBFA18EFFA2200C5AEA9 /* Marker Felt.ttf */; };
 		2562BBFE18EFFA2200C5AEA9 /* Marker Felt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2562BBFA18EFFA2200C5AEA9 /* Marker Felt.ttf */; };
+		256671F0190569DF003B7E4F /* GameOver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256671EE190569DF003B7E4F /* GameOver.cpp */; };
+		256671F1190569DF003B7E4F /* GameOver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 256671EE190569DF003B7E4F /* GameOver.cpp */; };
 		25E7EB6D18DD576D00A7A86D /* hero.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25E7EB6718DD576D00A7A86D /* hero.cpp */; };
 		25E7EB6E18DD576D00A7A86D /* lifeObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25E7EB6918DD576D00A7A86D /* lifeObj.cpp */; };
 		25E7EB6F18DD576D00A7A86D /* monster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25E7EB6B18DD576D00A7A86D /* monster.cpp */; };
@@ -432,6 +434,8 @@
 		2562BBF318EFECA800C5AEA9 /* QuadTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuadTree.h; path = ../Classes/QuadTree.h; sourceTree = "<group>"; };
 		2562BBF918EFFA2200C5AEA9 /* fzcy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fzcy.ttf; sourceTree = "<group>"; };
 		2562BBFA18EFFA2200C5AEA9 /* Marker Felt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Marker Felt.ttf"; sourceTree = "<group>"; };
+		256671EE190569DF003B7E4F /* GameOver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameOver.cpp; sourceTree = "<group>"; };
+		256671EF190569DF003B7E4F /* GameOver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameOver.h; sourceTree = "<group>"; };
 		25E7EB6718DD576D00A7A86D /* hero.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hero.cpp; sourceTree = "<group>"; };
 		25E7EB6818DD576D00A7A86D /* hero.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hero.h; sourceTree = "<group>"; };
 		25E7EB6918DD576D00A7A86D /* lifeObj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lifeObj.cpp; sourceTree = "<group>"; };
@@ -729,6 +733,8 @@
 			children = (
 				25E7EB7318DD5FF600A7A86D /* fighter.cpp */,
 				25E7EB7418DD5FF600A7A86D /* fighter.h */,
+				256671EE190569DF003B7E4F /* GameOver.cpp */,
+				256671EF190569DF003B7E4F /* GameOver.h */,
 			);
 			name = layer;
 			path = ../Classes/layer;
@@ -1167,6 +1173,7 @@
 				25E7EB6F18DD576D00A7A86D /* monster.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 				2562BBF418EFECA800C5AEA9 /* QuadTree.cpp in Sources */,
+				256671F0190569DF003B7E4F /* GameOver.cpp in Sources */,
 				25E7EB7518DD5FF600A7A86D /* fighter.cpp in Sources */,
 				1AFAF8B816D35DE700DB1158 /* HelloWorldScene.cpp in Sources */,
 				25E7EB6D18DD576D00A7A86D /* hero.cpp in Sources */,
@@ -1182,6 +1189,7 @@
 				5087E75717EB910900C73F5D /* AppDelegate.cpp in Sources */,
 				251D3A2018E471AE003D812F /* monster.cpp in Sources */,
 				251D3A1F18E471A8003D812F /* lifeObj.cpp in Sources */,
+				256671F1190569DF003B7E4F /* GameOver.cpp in Sources */,
 				251D3A1B18E4718C003D812F /* fighter.cpp in Sources */,
 				5087E75817EB910900C73F5D /* HelloWorldScene.cpp in Sources */,
 				251D3A1E18E471A2003D812F /* hero.cpp in Sources */,

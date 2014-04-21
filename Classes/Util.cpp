@@ -10,7 +10,7 @@
 
 USING_NS_CC;
 
-static Util *_util = nullptr;
+Util *Util::_util = nullptr;
 
 Size Util::getWinsize(){
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -18,10 +18,9 @@ Size Util::getWinsize(){
 }
 
 Point Util::getCenterPos(){
-//    Size visibleSize = Director::getInstance()->getVisibleSize();
-//    Point origin = Director::getInstance()->getVisibleOrigin();
-//    Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-//          origin.y + closeItem->getContentSize().height/2)
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Point origin = Director::getInstance()->getVisibleOrigin();
+    return Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y);
 }
 
 Util* Util::getInstance()

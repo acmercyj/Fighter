@@ -108,6 +108,7 @@ void lifeObj::removeRootObj(){
 }
 
 void lifeObj::die(Ref* data){
+    if(getState() == EobjState::E_DEAD) return;
     setState(EobjState::E_DEAD);
     int flag = 1;
     rootObj->stopAllActions();

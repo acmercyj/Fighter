@@ -20,17 +20,19 @@ public:
     
     Size getWinsize();
     
-    Point getCenterPos();
+    static Point getCenterPos();
     
-    //static Util* _util;
+    static Util* _util;
     
-    Util* getInstance();
+    static Util* getInstance();
     void destroyInstance();
     
     static bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
                                          float px, float py);
     
     static bool getCosTheta(Point origin, Point p);
+    
+    //static Util* instance;
 };
 
 enum E_tag

@@ -111,8 +111,8 @@ public:
     
     Point getPointInMap(Point pos);
     
-    bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
-                                  float px, float py);
+    //bool IsPointInCircularSector3(float cx, float cy, float ux, float uy, float squaredR, float cosTheta,
+    //                              float px, float py);
     
     virtual Point getKeyPoint(Point exP) {
         

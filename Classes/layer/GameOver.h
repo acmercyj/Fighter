@@ -27,8 +27,6 @@ public:
     
     void exitClicked(Ref* obj);
     
-    Point getCenterPos();
-    
     CREATE_FUNC(LGameOver);
 };
 #endif /* defined(__Fighter__GameOver__) */

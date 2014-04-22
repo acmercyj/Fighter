@@ -16,7 +16,7 @@ bool LGameOver::init()
     }
     Label* l = Label::create("100", "fzcy.ttf", 50);
     l->setString("Game Over");
-    l->setPosition(getCenterPos());
+    l->setPosition(Util::getCenterPos());
     l->setAnchorPoint(Point(0.5, 0.5));
     this->addChild(l);
     
@@ -50,13 +50,6 @@ Scene* LGameOver::createScene()
     
     // return the scene
     return scene;
-}
-
-
-Point LGameOver::getCenterPos(){
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Point origin = Director::getInstance()->getVisibleOrigin();
-    return Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y);
 }
 
 void LGameOver::exitClicked(Ref* obj){

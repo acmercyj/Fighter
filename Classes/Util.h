@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class Util : public cocos2d::Layer
+class Util //: public cocos2d::Layer
 {
 public:
     Util() {}

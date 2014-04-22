@@ -243,7 +243,7 @@ void LCBattleScene::sendPosition(Point pos){
 }
 
 void LCBattleScene::createHero(){
-    hero = ObjHero::create(backGround, getCenterPos());
+    hero = ObjHero::create(backGround, Util::getCenterPos());
     hero->retain();
     //hero->setActiveRange(backGround->getContentSize());
     hero->actionStand();
@@ -251,12 +251,6 @@ void LCBattleScene::createHero(){
     hero->getrootObj()->setTag(ETagHero);
     
     QuadTree::getInstance()->addObject(hero);
-}
-
-Point LCBattleScene::getCenterPos(){
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Point origin = Director::getInstance()->getVisibleOrigin();
-    return Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y);
 }
 
 //do initialization here
@@ -323,7 +317,7 @@ Point LCBattleScene::getPointInMap(Point pos){
 
 void LCBattleScene::addMonster(int amount){
     while(amount--) {
-        addMonsterAtPosition(ccpAdd(getCenterPos(), Point(rand() % 50, rand() % 60)));
+        addMonsterAtPosition(ccpAdd(Util::getCenterPos(), Point(rand() % 50, rand() % 60)));
     }
 }
 

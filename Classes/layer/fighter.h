@@ -41,10 +41,7 @@ public:
     void addMonsterAtPosition(cocos2d::Point p);
     
     void test(float d);
-    
-public:
-    
-    Point getCenterPos();
+
 private:
     void backClicked();
     

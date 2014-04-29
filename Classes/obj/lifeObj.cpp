@@ -105,7 +105,7 @@ void lifeObj::hurt(float deltaAngle, float hp){
 
 void lifeObj::removeRootObj(){
     __NotificationCenter::getInstance()->postNotification("deleteObj", this);
-    rootObj->removeFromParentAndCleanup(true);
+    if(rootObj) rootObj->removeFromParentAndCleanup(true);
 }
 
 void lifeObj::die(Ref* data){
